@@ -6,6 +6,7 @@ TagManager:
   tags:
   - PowerupGoldNugget
   - Wall
+  - Floor
   layers:
   - Default
   - TransparentFX

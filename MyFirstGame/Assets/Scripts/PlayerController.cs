@@ -2,21 +2,25 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : GenericSprite
 {
     public float speed;
 
     private Rigidbody2D rb2d;
     private int count;
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
+
         rb2d = GetComponent<Rigidbody2D>();
         count = 0;
     }
 
-    void FixedUpdate()
+    protected override void FixedUpdate()
     {
+        base.FixedUpdate();
+
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 
