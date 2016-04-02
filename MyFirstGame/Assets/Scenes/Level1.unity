@@ -349,6 +349,38 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 125044, guid: eb4344862f0633c47ab7170a005cdf64, type: 2}
+      propertyPath: m_TagString
+      value: Floor
+      objectReference: {fileID: 0}
+    - target: {fileID: 116010, guid: eb4344862f0633c47ab7170a005cdf64, type: 2}
+      propertyPath: m_TagString
+      value: Floor
+      objectReference: {fileID: 0}
+    - target: {fileID: 185166, guid: eb4344862f0633c47ab7170a005cdf64, type: 2}
+      propertyPath: m_TagString
+      value: Floor
+      objectReference: {fileID: 0}
+    - target: {fileID: 124682, guid: eb4344862f0633c47ab7170a005cdf64, type: 2}
+      propertyPath: m_TagString
+      value: Floor
+      objectReference: {fileID: 0}
+    - target: {fileID: 6147962, guid: eb4344862f0633c47ab7170a005cdf64, type: 2}
+      propertyPath: m_Offset.x
+      value: -2.149085
+      objectReference: {fileID: 0}
+    - target: {fileID: 6147962, guid: eb4344862f0633c47ab7170a005cdf64, type: 2}
+      propertyPath: m_Size.x
+      value: 16.390223
+      objectReference: {fileID: 0}
+    - target: {fileID: 6147962, guid: eb4344862f0633c47ab7170a005cdf64, type: 2}
+      propertyPath: m_Offset.y
+      value: 1.8717813
+      objectReference: {fileID: 0}
+    - target: {fileID: 6147962, guid: eb4344862f0633c47ab7170a005cdf64, type: 2}
+      propertyPath: m_Size.y
+      value: 16.528872
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: eb4344862f0633c47ab7170a005cdf64, type: 2}
   m_IsPrefabParent: 0

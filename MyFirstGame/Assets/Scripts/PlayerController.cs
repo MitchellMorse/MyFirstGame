@@ -27,6 +27,19 @@ public class PlayerController : GenericSprite
         Vector2 movement = new Vector2(moveHorizontal, moveVertical);
 
         rb2d.AddForce(movement * speed);
+
+        HandlePlayerLeavingFloor();
+    }
+
+    private void HandlePlayerLeavingFloor()
+    {
+        CircleCollider2D circleCollider2D = GetComponent<CircleCollider2D>();
+        
+        Collider2D overlapCircle = Physics2D.OverlapCircle(transform.position, circleCollider2D.radius, 1);
+        if (overlapCircle == null)
+        {
+            this.CurrentState = SpriteState.Shrinking;
+        }
     }
 
     void OnTriggerEnter2D(Collider2D other)
