@@ -21,10 +21,10 @@ public class PlayerController : GenericSprite
     {
         base.FixedUpdate();
 
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        float moveVertical = Input.GetAxis("Vertical");
+        float moveHorizontal = Input.GetAxis("Horizontal") + RightForce - LeftForce;
+        float moveVertical = Input.GetAxis("Vertical") - DownwardForce + UpwardForce;
 
-        Vector2 movement = new Vector2(moveHorizontal, moveVertical);
+        Vector2 movement = new Vector2(moveHorizontal, moveVertical); //- vertical goes down
 
         rb2d.AddForce(movement * speed);
 

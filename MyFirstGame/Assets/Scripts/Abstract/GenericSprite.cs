@@ -13,6 +13,11 @@ public abstract class GenericSprite : MonoBehaviour
     public SpriteState CurrentState;
     public float AmountToScaleBy = .1f;
 
+    protected float DownwardForce = 0;
+    protected float UpwardForce = 0;
+    protected float RightForce = 0;
+    protected float LeftForce = 0;
+
     protected virtual void Start()
     {
         CurrentState = SpriteState.Normal;
