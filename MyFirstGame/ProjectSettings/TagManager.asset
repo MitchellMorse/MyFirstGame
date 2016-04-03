@@ -7,6 +7,10 @@ TagManager:
   - PowerupGoldNugget
   - Wall
   - Floor
+  - FloorSlopeDown
+  - FloorSlopeUp
+  - FloorSlopeRight
+  - FloorSlopeLeft
   layers:
   - Default
   - TransparentFX
