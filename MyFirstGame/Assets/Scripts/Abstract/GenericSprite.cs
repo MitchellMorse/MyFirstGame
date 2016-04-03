@@ -17,17 +17,17 @@ public abstract class GenericSprite : MonoBehaviour
 
     protected virtual void Start()
     {
-        CurrentState |= (int)SpriteState.Normal;
+        CurrentState.AddBitToInt((int) SpriteState.Normal);
     }
 
-    protected virtual void FixedUpdate()
+    protected virtual void Update()
     {
         HandleState();
     }
 
     protected virtual void HandleState()
     {
-        if ((CurrentState & (int)SpriteState.DownSlope) != 0)
+        if (CurrentState.CheckForExistenceOfBit((int)SpriteState.DownSlope))
         {
             if (DownwardForce < MaxPullForce)
             {
@@ -35,15 +35,15 @@ public abstract class GenericSprite : MonoBehaviour
             }
         }
 
-        if ((CurrentState & (int)SpriteState.UpSlope) != 0)
+        if (CurrentState.CheckForExistenceOfBit((int)SpriteState.UpSlope))
         {
             if (UpwardForce < MaxPullForce)
             {
                 UpwardForce += AmountOfForceToAddPerUpdate;
             }
         }
-
-        if ((CurrentState & (int)SpriteState.RightSlope) != 0)
+        
+        if(CurrentState.CheckForExistenceOfBit((int)SpriteState.RightSlope))
         {
             if (RightForce < MaxPullForce)
             {
@@ -51,7 +51,7 @@ public abstract class GenericSprite : MonoBehaviour
             }
         }
 
-        if ((CurrentState & (int)SpriteState.LeftSlope) != 0)
+        if (CurrentState.CheckForExistenceOfBit((int)SpriteState.LeftSlope))
         {
             if (LeftForce < MaxPullForce)
             {
@@ -59,7 +59,7 @@ public abstract class GenericSprite : MonoBehaviour
             }
         }
 
-        if ((CurrentState & (int)SpriteState.Shrinking) != 0)
+        if (CurrentState.CheckForExistenceOfBit((int)SpriteState.Shrinking))
         {
             HandleShrinking();
         }
