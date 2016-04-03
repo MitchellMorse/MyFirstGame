@@ -1617,7 +1617,7 @@ GameObject:
   - 61: {fileID: 1928087931}
   m_Layer: 0
   m_Name: SlopedFloor
-  m_TagString: Floor
+  m_TagString: FloorSlopeDown
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1633,9 +1633,9 @@ BoxCollider2D:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_UsedByEffector: 0
-  m_Offset: {x: 10.3181, y: -6.3599854}
+  m_Offset: {x: 10.3181, y: -5.9202003}
   serializedVersion: 2
-  m_Size: {x: 16.629402, y: 1.6765823}
+  m_Size: {x: 16.629402, y: 0.7970123}
 --- !u!4 &1928087932
 Transform:
   m_ObjectHideFlags: 0

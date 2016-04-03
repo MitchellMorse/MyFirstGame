@@ -1,16 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 
 public abstract class GenericSprite : MonoBehaviour
 {
-    public enum SpriteState
-    {
-        Normal,
-        Shrinking,
-        Growing
-    }
-
-    public SpriteState CurrentState;
+    protected int CurrentState;
     public float AmountToScaleBy = .1f;
 
     protected float DownwardForce = 0;
@@ -18,9 +12,12 @@ public abstract class GenericSprite : MonoBehaviour
     protected float RightForce = 0;
     protected float LeftForce = 0;
 
+    private float MaxPullForce = .5f;
+    private float AmountOfForceToAddPerUpdate = .05f;
+
     protected virtual void Start()
     {
-        CurrentState = SpriteState.Normal;
+        CurrentState |= (int)SpriteState.Normal;
     }
 
     protected virtual void FixedUpdate()
@@ -30,23 +27,41 @@ public abstract class GenericSprite : MonoBehaviour
 
     protected virtual void HandleState()
     {
-        switch (CurrentState)
+        if ((CurrentState & (int)SpriteState.DownSlope) != 0)
         {
-            case SpriteState.Normal:
-                break;
-            case SpriteState.Shrinking:
-                HandleShrinking();
-                break;
-            case SpriteState.Growing:
-                break;
+            if (DownwardForce < MaxPullForce)
+            {
+                DownwardForce += AmountOfForceToAddPerUpdate;
+            }
         }
-    }
 
-    protected virtual void OnCollisionExit(Collision col)
-    {
-        if (col.gameObject.CompareTag("Floor"))
+        if ((CurrentState & (int)SpriteState.UpSlope) != 0)
         {
-            CurrentState = SpriteState.Shrinking;
+            if (UpwardForce < MaxPullForce)
+            {
+                UpwardForce += AmountOfForceToAddPerUpdate;
+            }
+        }
+
+        if ((CurrentState & (int)SpriteState.RightSlope) != 0)
+        {
+            if (RightForce < MaxPullForce)
+            {
+                RightForce += AmountOfForceToAddPerUpdate;
+            }
+        }
+
+        if ((CurrentState & (int)SpriteState.LeftSlope) != 0)
+        {
+            if (LeftForce < MaxPullForce)
+            {
+                LeftForce += AmountOfForceToAddPerUpdate;
+            }
+        }
+
+        if ((CurrentState & (int)SpriteState.Shrinking) != 0)
+        {
+            HandleShrinking();
         }
     }
 
@@ -63,5 +78,11 @@ public abstract class GenericSprite : MonoBehaviour
         {
             DestroyObject(this);
         }
+    }
+
+    protected virtual void StopVelocity()
+    {
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        rb.velocity = Vector3.zero;
     }
 }
