@@ -22,8 +22,8 @@ TagManager:
   - 
   - Blocking Layer
   - Powerup
-  - 
-  - 
+  - Floor
+  - Wall
   - 
   - 
   - 
@@ -50,6 +50,9 @@ TagManager:
     locked: 0
   - name: Wall
     uniqueID: 1058342781
+    locked: 0
+  - name: Floor
+    uniqueID: 3593584399
     locked: 0
   - name: Powerups
     uniqueID: 2925812739
