@@ -33,13 +33,6 @@ public class PlayerController : GenericSprite
 
     private void HandlePlayerLeavingFloor()
     {
-        //CircleCollider2D circleCollider2D = GetComponent<CircleCollider2D>();
-
-        //LayerMask floorLayerMask = LayerMask.NameToLayer("Floor");
-
-        //Collider2D overlapCircle = Physics2D.OverlapCircle(transform.position, circleCollider2D.radius, floorLayerMask);
-
-        //if (overlapCircle == null)
         if(TouchingFloorObjects <= 0)
         {
             CurrentState = CurrentState.AddBitToInt((int)SpriteState.Shrinking);
