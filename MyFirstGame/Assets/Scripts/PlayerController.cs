@@ -5,9 +5,12 @@ using UnityEngine.UI;
 public class PlayerController : GenericSprite
 {
     public float speed;
+    public Text debugText;
 
     private Rigidbody2D rb2d;
     private int TouchingFloorObjects;
+    private float CurrentAcceleration;
+    private float PowerSpeed = 20f;
 
     protected override void Start()
     {
@@ -15,6 +18,7 @@ public class PlayerController : GenericSprite
 
         rb2d = GetComponent<Rigidbody2D>();
         TouchingFloorObjects = 0;
+        CurrentAcceleration = 0f;
     }
 
     protected override void Update()
@@ -25,10 +29,22 @@ public class PlayerController : GenericSprite
         float moveVertical = CurrentState.CheckForExistenceOfBit((int)SpriteState.Shrinking) ? 0 : Input.GetAxis("Vertical") - DownwardForce + UpwardForce;
 
         Vector2 movement = new Vector2(moveHorizontal, moveVertical); //- vertical goes down
-
+        
         rb2d.AddForce(movement * speed);
 
+        PlayerSpeedProcessing();
         HandlePlayerLeavingFloor();
+    }
+
+    private void PlayerSpeedProcessing()
+    {
+        float currentSpeed = rb2d.velocity.magnitude;
+        SetDebugText(string.Format("Current speed: {0}", currentSpeed));
+
+        if (currentSpeed >= PowerSpeed)
+        {
+            
+        }
     }
 
     private void HandlePlayerLeavingFloor()
@@ -38,6 +54,11 @@ public class PlayerController : GenericSprite
             CurrentState = CurrentState.AddBitToInt((int)SpriteState.Shrinking);
             StopVelocity();
         }
+    }
+
+    public bool IsPlayerAtPowerSpeed()
+    {
+        return rb2d.velocity.magnitude >= PowerSpeed;
     }
     
     void OnTriggerEnter2D(Collider2D other)
@@ -98,5 +119,10 @@ public class PlayerController : GenericSprite
         {
             TouchingFloorObjects--;
         }
+    }
+
+    private void SetDebugText(string text)
+    {
+        debugText.text = text;
     }
 }

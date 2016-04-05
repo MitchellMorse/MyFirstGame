@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Random = UnityEngine.Random;
 
 public class CameraController : MonoBehaviour
 {
 
-    public GameObject player;
+    public PlayerController player;
 
     private Vector3 offset;
 
@@ -19,6 +20,23 @@ public class CameraController : MonoBehaviour
     // LateUpdate runs after update
     void LateUpdate()
     {
-        transform.position = player.transform.position + offset;
+        transform.position = CalculateCameraPosition();
+    }
+
+    private Vector3 CalculateCameraPosition()
+    {
+        Vector3 retVal;
+        if (!player.IsPlayerAtPowerSpeed())
+        {
+            retVal = player.transform.position + offset;
+        }
+        else
+        {
+            float xOffset = Random.Range(0f, .1f);
+            float yOffset = Random.Range(0f, .1f);
+            retVal = new Vector3(player.transform.position.x + xOffset, player.transform.position.y + yOffset) + offset;
+        }
+
+        return retVal;
     }
 }
