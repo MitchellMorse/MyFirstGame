@@ -2687,7 +2687,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11421822, guid: df4740c265b98e64089a22fdd0cbf852, type: 2}
       propertyPath: speed
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 11421822, guid: df4740c265b98e64089a22fdd0cbf852, type: 2}
       propertyPath: debugText
@@ -2703,7 +2703,19 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 5065048, guid: df4740c265b98e64089a22fdd0cbf852, type: 2}
       propertyPath: m_LinearDrag
-      value: 0.5
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 11421822, guid: df4740c265b98e64089a22fdd0cbf852, type: 2}
+      propertyPath: fuelCount
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 11421822, guid: df4740c265b98e64089a22fdd0cbf852, type: 2}
+      propertyPath: fuelCountDecrement
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 11421822, guid: df4740c265b98e64089a22fdd0cbf852, type: 2}
+      propertyPath: fuelCountDecrementMax
+      value: 25
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: df4740c265b98e64089a22fdd0cbf852, type: 2}

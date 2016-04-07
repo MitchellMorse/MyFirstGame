@@ -6,11 +6,14 @@ public class PlayerController : GenericSprite
 {
     public float speed;
     public Text debugText;
+    public int fuelCount;
+    public int fuelCountDecrementMax;
 
     private Rigidbody2D rb2d;
     private int TouchingFloorObjects;
     private float CurrentAcceleration;
     private float PowerSpeed = 20f;
+    private int FuelCountDecrement;
     
     //this is an experiment
     private float decelTime = 10;
@@ -24,16 +27,17 @@ public class PlayerController : GenericSprite
         rb2d = GetComponent<Rigidbody2D>();
         TouchingFloorObjects = 0;
         CurrentAcceleration = 0f;
+        FuelCountDecrement = 0;
     }
 
     protected override void Update()
     {
         base.Update();
 
-        float moveHorizontal = CurrentState.CheckForExistenceOfBit((int)SpriteState.Shrinking) ? 0 : Input.GetAxis("Horizontal") + RightForce - LeftForce;
-        float moveVertical = CurrentState.CheckForExistenceOfBit((int)SpriteState.Shrinking) ? 0 : Input.GetAxis("Vertical") - DownwardForce + UpwardForce;
+        float moveVertical, moveHorizontal;
+        CheckForPlayerInput(out moveVertical, out moveHorizontal);
 
-        //SetDebugText(string.Format("Current moveVertical: {0}", currentSpeed));
+        //SetDebugText(string.Format("Horizontal: {0}.  Vertical: {1}.", moveHorizontal, moveVertical));
 
         Vector2 movement = new Vector2(moveHorizontal, moveVertical); //- vertical goes down
 
@@ -43,12 +47,6 @@ public class PlayerController : GenericSprite
         } 
         else if(transform.position.magnitude > 0  )
         {
-            //currentSpeed -= 1;
-            //rb2d.AddForce(movement * 0);
-            //Vector3 velocity = Vector3.zero;
-            //rb2d.transform.position = Vector3.SmoothDamp(rb2d.transform.position, rb2d.transform.position, ref velocity,
-            //    .3f);
-
             float interpolatingFactor = currenDecelTime/decelTime;
             Vector3 move = Vector3.Slerp(testSpeed, Vector3.zero, interpolatingFactor);
 
@@ -58,12 +56,55 @@ public class PlayerController : GenericSprite
 
         PlayerSpeedProcessing();
         HandlePlayerLeavingFloor();
+        UpdateFuelCount();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="moveVertical"></param>
+    /// <param name="moveHorizontal"></param>
+    /// <returns>true if any input is found</returns>
+    private bool CheckForPlayerInput(out float moveVertical, out float moveHorizontal)
+    {
+        moveHorizontal = moveVertical = 0f;
+
+        if (fuelCount > 0)
+        {
+            moveHorizontal = CurrentState.CheckForExistenceOfBit((int) SpriteState.Shrinking)
+                ? 0
+                : Input.GetAxis("Horizontal") + RightForce - LeftForce;
+            moveVertical = CurrentState.CheckForExistenceOfBit((int) SpriteState.Shrinking)
+                ? 0
+                : Input.GetAxis("Vertical") - DownwardForce + UpwardForce;
+        }
+
+        return moveVertical != 0 || moveHorizontal != 0;
+    }
+
+    private void UpdateFuelCount()
+    {
+        float moveVertical, moveHorizontal;
+        bool playerMoving = CheckForPlayerInput(out moveVertical, out moveHorizontal);
+
+        if (playerMoving)
+        {
+            FuelCountDecrement += 1;
+        }
+
+        if (FuelCountDecrement >= fuelCountDecrementMax)
+        {
+            fuelCount -= 1;
+            FuelCountDecrement = 0;
+        }
+
+        SetDebugText(string.Format("Current fuel: {0}", fuelCount));
     }
 
     private void PlayerSpeedProcessing()
     {
         float currentSpeed = rb2d.velocity.magnitude;
-        SetDebugText(string.Format("Current speed: {0}", currentSpeed));
+        //SetDebugText(string.Format("Current speed: {0}", currentSpeed));
     }
 
     private void HandlePlayerLeavingFloor()
