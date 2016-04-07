@@ -11,6 +11,11 @@ public class PlayerController : GenericSprite
     private int TouchingFloorObjects;
     private float CurrentAcceleration;
     private float PowerSpeed = 20f;
+    
+    //this is an experiment
+    private float decelTime = 10;
+    private float currenDecelTime = 0;
+    private Vector3 testSpeed;
 
     protected override void Start()
     {
@@ -28,9 +33,28 @@ public class PlayerController : GenericSprite
         float moveHorizontal = CurrentState.CheckForExistenceOfBit((int)SpriteState.Shrinking) ? 0 : Input.GetAxis("Horizontal") + RightForce - LeftForce;
         float moveVertical = CurrentState.CheckForExistenceOfBit((int)SpriteState.Shrinking) ? 0 : Input.GetAxis("Vertical") - DownwardForce + UpwardForce;
 
+        //SetDebugText(string.Format("Current moveVertical: {0}", currentSpeed));
+
         Vector2 movement = new Vector2(moveHorizontal, moveVertical); //- vertical goes down
-        
-        rb2d.AddForce(movement * speed);
+
+        if (moveHorizontal != 0f || moveVertical != 0f)
+        {
+            rb2d.AddForce(movement*speed);
+        } 
+        else if(transform.position.magnitude > 0  )
+        {
+            //currentSpeed -= 1;
+            //rb2d.AddForce(movement * 0);
+            //Vector3 velocity = Vector3.zero;
+            //rb2d.transform.position = Vector3.SmoothDamp(rb2d.transform.position, rb2d.transform.position, ref velocity,
+            //    .3f);
+
+            float interpolatingFactor = currenDecelTime/decelTime;
+            Vector3 move = Vector3.Slerp(testSpeed, Vector3.zero, interpolatingFactor);
+
+            transform.position -= move;
+            currenDecelTime += Time.deltaTime;
+        }
 
         PlayerSpeedProcessing();
         HandlePlayerLeavingFloor();
@@ -40,11 +64,6 @@ public class PlayerController : GenericSprite
     {
         float currentSpeed = rb2d.velocity.magnitude;
         SetDebugText(string.Format("Current speed: {0}", currentSpeed));
-
-        if (currentSpeed >= PowerSpeed)
-        {
-            
-        }
     }
 
     private void HandlePlayerLeavingFloor()

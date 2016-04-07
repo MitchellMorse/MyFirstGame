@@ -2643,11 +2643,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 468408, guid: df4740c265b98e64089a22fdd0cbf852, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -2.2
+      value: -2.5
       objectReference: {fileID: 0}
     - target: {fileID: 468408, guid: df4740c265b98e64089a22fdd0cbf852, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 5.8
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 468408, guid: df4740c265b98e64089a22fdd0cbf852, type: 2}
       propertyPath: m_LocalPosition.z
@@ -2693,6 +2693,18 @@ Prefab:
       propertyPath: debugText
       value: 
       objectReference: {fileID: 1716700140}
+    - target: {fileID: 5065048, guid: df4740c265b98e64089a22fdd0cbf852, type: 2}
+      propertyPath: m_GravityScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5065048, guid: df4740c265b98e64089a22fdd0cbf852, type: 2}
+      propertyPath: m_Interpolate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5065048, guid: df4740c265b98e64089a22fdd0cbf852, type: 2}
+      propertyPath: m_LinearDrag
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: df4740c265b98e64089a22fdd0cbf852, type: 2}
   m_IsPrefabParent: 0
