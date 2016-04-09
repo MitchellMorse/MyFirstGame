@@ -14,8 +14,6 @@ public class PlayerController : GenericSprite
     private float CurrentAcceleration;
     private float PowerSpeed = 20f;
     private int FuelCountDecrement;
-    
-    //this is an experiment
     private float decelTime = 10;
     private float currenDecelTime = 0;
     private Vector3 testSpeed;
@@ -123,59 +121,63 @@ public class PlayerController : GenericSprite
     
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("FloorSlopeDown"))
+        if (other.gameObject.CompareTag(Tags.FloorSlopeDown.ToString()))
         {
             CurrentState = CurrentState.AddBitToInt((int) SpriteState.DownSlope);
             TouchingFloorObjects++;
         }
-        else if (other.gameObject.CompareTag("FloorSlopeUp"))
+        else if (other.gameObject.CompareTag(Tags.FloorSlopeUp.ToString()))
         {
             CurrentState = CurrentState.AddBitToInt((int)SpriteState.UpSlope);
             TouchingFloorObjects++;
         }
-        else if (other.gameObject.CompareTag("FloorSlopeRight"))
+        else if (other.gameObject.CompareTag(Tags.FloorSlopeRight.ToString()))
         {
             CurrentState = CurrentState.AddBitToInt((int)SpriteState.RightSlope);
             TouchingFloorObjects++;
         }
-        else if (other.gameObject.CompareTag("FloorSlopeLeft"))
+        else if (other.gameObject.CompareTag(Tags.FloorSlopeLeft.ToString()))
         {
             CurrentState = CurrentState.AddBitToInt((int)SpriteState.LeftSlope);
             TouchingFloorObjects++;
         }
-        else if (other.gameObject.CompareTag("Floor"))
+        else if (other.gameObject.CompareTag(Tags.Floor.ToString()))
         {
             TouchingFloorObjects++;
+        }
+        else if (other.gameObject.CompareTag(Tags.PickupSpeed.ToString()))
+        {
+            
         }
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("FloorSlopeDown"))
+        if (other.gameObject.CompareTag(Tags.FloorSlopeDown.ToString()))
         {
             CurrentState = CurrentState.RemoveBitFromInt((int) SpriteState.DownSlope);
             DownwardForce = 0;
             TouchingFloorObjects--;
         }
-        else if (other.gameObject.CompareTag("FloorSlopeUp"))
+        else if (other.gameObject.CompareTag(Tags.FloorSlopeUp.ToString()))
         {
             CurrentState = CurrentState.RemoveBitFromInt((int)SpriteState.UpSlope);
             UpwardForce = 0;
             TouchingFloorObjects--;
         }
-        else if (other.gameObject.CompareTag("FloorSlopeRight"))
+        else if (other.gameObject.CompareTag(Tags.FloorSlopeRight.ToString()))
         {
             CurrentState = CurrentState.RemoveBitFromInt((int)SpriteState.RightSlope);
             RightForce = 0;
             TouchingFloorObjects--;
         }
-        else if (other.gameObject.CompareTag("FloorSlopeLeft"))
+        else if (other.gameObject.CompareTag(Tags.FloorSlopeLeft.ToString()))
         {
             CurrentState = CurrentState.RemoveBitFromInt((int)SpriteState.LeftSlope);
             UpwardForce = 0;
             TouchingFloorObjects--;
         }
-        else if (other.gameObject.CompareTag("Floor"))
+        else if (other.gameObject.CompareTag(Tags.Floor.ToString()))
         {
             TouchingFloorObjects--;
         }

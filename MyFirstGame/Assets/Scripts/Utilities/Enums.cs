@@ -11,3 +11,20 @@ public enum SpriteState
     RightSlope = 16,
     LeftSlope = 32
 }
+
+public enum Tags
+{
+    Respawn,
+    Finish,
+    EditorOnly,
+    MainCamera,
+    Player,
+    GameController,
+    Wall,
+    Floor,
+    FloorSlopeDown,
+    FloorSlopeUp,
+    FloorSlopeLeft,
+    FloorSlopeRight,
+    PickupSpeed
+}
