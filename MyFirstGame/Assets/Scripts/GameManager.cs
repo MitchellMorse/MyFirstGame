@@ -5,9 +5,9 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance = null;
-    public Text speedCountText;
+    //public Text speedCountText;
 
-    private PlayerStats _playerStats;
+    //private PlayerStats _playerStats;
 
     // Use this for initialization
     void Awake ()
@@ -22,13 +22,13 @@ public class GameManager : MonoBehaviour
         }
 
         DontDestroyOnLoad(gameObject);
-        _playerStats = new PlayerStats();
+        //_playerStats = new PlayerStats();
     }
 
     // Update is called once per frame
     void Update()
     {
-        speedCountText.text = string.Format("Speed Powerup Count: {0}",
-            _playerStats.PermanentSpeedCount + _playerStats.TemporarySpeedCount);
+        //speedCountText.text = string.Format("Speed Powerup Count: {0}",
+        //    _playerStats.PermanentSpeedCount + _playerStats.TemporarySpeedCount);
     }
 }

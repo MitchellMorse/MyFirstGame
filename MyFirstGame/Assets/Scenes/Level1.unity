@@ -2879,6 +2879,10 @@ Prefab:
       propertyPath: fuelCountDecrementMax
       value: 25
       objectReference: {fileID: 0}
+    - target: {fileID: 11421822, guid: df4740c265b98e64089a22fdd0cbf852, type: 2}
+      propertyPath: speedCountText
+      value: 
+      objectReference: {fileID: 1729510099}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: df4740c265b98e64089a22fdd0cbf852, type: 2}
   m_IsPrefabParent: 0

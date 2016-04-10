@@ -2,12 +2,16 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class PlayerController : GenericSprite
+public partial class PlayerController : GenericSprite
 {
     public float speed;
     public Text debugText;
     public int fuelCount;
     public int fuelCountDecrementMax;
+    public Text speedCountText;
+
+    [HideInInspector]
+    public PlayerStats _playerStats;
 
     private Rigidbody2D rb2d;
     private int TouchingFloorObjects;
@@ -17,6 +21,8 @@ public class PlayerController : GenericSprite
     private float decelTime = 10;
     private float currenDecelTime = 0;
     private Vector3 testSpeed;
+    private float moveVertical;
+    private float moveHorizontal;
 
     protected override void Start()
     {
@@ -26,35 +32,36 @@ public class PlayerController : GenericSprite
         TouchingFloorObjects = 0;
         CurrentAcceleration = 0f;
         FuelCountDecrement = 0;
+        _playerStats = new PlayerStats();
+        moveVertical = moveHorizontal = 0;
     }
 
     protected override void Update()
     {
         base.Update();
-
-        float moveVertical, moveHorizontal;
-        CheckForPlayerInput(out moveVertical, out moveHorizontal);
-
-        //SetDebugText(string.Format("Horizontal: {0}.  Vertical: {1}.", moveHorizontal, moveVertical));
+        
+        CheckForPlayerInput();
 
         Vector2 movement = new Vector2(moveHorizontal, moveVertical); //- vertical goes down
 
         if (moveHorizontal != 0f || moveVertical != 0f)
         {
             rb2d.AddForce(movement*speed);
-        } 
-        else if(transform.position.magnitude > 0  )
-        {
-            float interpolatingFactor = currenDecelTime/decelTime;
-            Vector3 move = Vector3.Slerp(testSpeed, Vector3.zero, interpolatingFactor);
-
-            transform.position -= move;
-            currenDecelTime += Time.deltaTime;
         }
 
         PlayerSpeedProcessing();
         HandlePlayerLeavingFloor();
-        UpdateFuelCount();
+        UpdateHud();
+
+        moveVertical = moveHorizontal = 0;
+    }
+
+    private void UpdateHud()
+    {
+        UpdateFuelCount(moveVertical, moveHorizontal);
+
+        speedCountText.text = string.Format("Speed Powerup Count: {0}",
+            _playerStats.PermanentSpeedCount + _playerStats.TemporarySpeedCount);
     }
 
     /// <summary>
@@ -63,27 +70,33 @@ public class PlayerController : GenericSprite
     /// <param name="moveVertical"></param>
     /// <param name="moveHorizontal"></param>
     /// <returns>true if any input is found</returns>
-    private bool CheckForPlayerInput(out float moveVertical, out float moveHorizontal)
+    private bool CheckForPlayerInput()
     {
         moveHorizontal = moveVertical = 0f;
 
         if (fuelCount > 0)
         {
-            moveHorizontal = CurrentState.CheckForExistenceOfBit((int) SpriteState.Shrinking)
-                ? 0
-                : Input.GetAxis("Horizontal") + RightForce - LeftForce;
-            moveVertical = CurrentState.CheckForExistenceOfBit((int) SpriteState.Shrinking)
-                ? 0
-                : Input.GetAxis("Vertical") - DownwardForce + UpwardForce;
+            CheckForMovementInput(ref moveVertical, ref moveHorizontal);
         }
+
+        CheckForPowerupInput();
 
         return moveVertical != 0 || moveHorizontal != 0;
     }
 
-    private void UpdateFuelCount()
+    private void CheckForMovementInput(ref float moveVertical, ref float moveHorizontal)
     {
-        float moveVertical, moveHorizontal;
-        bool playerMoving = CheckForPlayerInput(out moveVertical, out moveHorizontal);
+        moveHorizontal = CurrentState.CheckForExistenceOfBit((int) SpriteState.Shrinking)
+            ? 0
+            : Input.GetAxis("Horizontal") + RightForce - LeftForce;
+        moveVertical = CurrentState.CheckForExistenceOfBit((int) SpriteState.Shrinking)
+            ? 0
+            : Input.GetAxis("Vertical") - DownwardForce + UpwardForce;
+    }
+
+    private void UpdateFuelCount(float moveVertical, float moveHorizontal)
+    {
+        bool playerMoving = moveVertical != 0 || moveHorizontal != 0;
 
         if (playerMoving)
         {
@@ -147,7 +160,8 @@ public class PlayerController : GenericSprite
         }
         else if (other.gameObject.CompareTag(Tags.PickupSpeed.ToString()))
         {
-            
+            other.gameObject.SetActive(false);
+            _playerStats.TemporarySpeedCount += 1;
         }
     }
 
