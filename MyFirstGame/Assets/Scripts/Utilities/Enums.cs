@@ -28,3 +28,9 @@ public enum Tags
     FloorSlopeRight,
     PickupSpeed
 }
+
+public enum PowerupTypes
+{
+    Speed,
+    Jump
+}

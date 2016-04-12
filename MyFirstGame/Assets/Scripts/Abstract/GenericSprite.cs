@@ -11,12 +11,14 @@ public abstract class GenericSprite : MonoBehaviour
     protected float UpwardForce = 0;
     protected float RightForce = 0;
     protected float LeftForce = 0;
+    protected Rigidbody2D rb2d;
 
     private float MaxPullForce = .5f;
     private float AmountOfForceToAddPerUpdate = .05f;
 
     protected virtual void Start()
     {
+        rb2d = GetComponent<Rigidbody2D>();
         CurrentState.AddBitToInt((int) SpriteState.Normal);
     }
 
@@ -84,5 +86,13 @@ public abstract class GenericSprite : MonoBehaviour
     {
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         rb.velocity = Vector3.zero;
+    }
+
+    public void SendSpriteInNewDirection(float horizontalMovement, float verticalMovement, float forceMultiplier)
+    {
+        StopVelocity();
+
+        Vector2 movement = new Vector2(horizontalMovement, verticalMovement);
+        rb2d.AddForce(movement * forceMultiplier);
     }
 }

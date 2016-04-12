@@ -1,41 +1,52 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using Assets.Scripts.Interfaces;
 
 [Serializable]
-public class PlayerStats : MonoBehaviour
+public class PlayerStats : MonoBehaviour, IPlayerStats
 {
 
-    private int _permanentSpeedCount;
-    private int _temporarySpeedCount;
+    public int PermanentSpeedCount;
+    public int TempSpeedCount;
 
-    public int PermanentSpeedCount 
+    public int TempJumpCount;
+    public int PermanentJumpCount;
+
+    int IPlayerStats.PermanentSpeedCount
     {
-        get { return _permanentSpeedCount;}
-        set { _permanentSpeedCount = value; }
+        get { return PermanentSpeedCount; }
+
+        set { PermanentSpeedCount = value; }
     }
 
-    public int TemporarySpeedCount
+    int IPlayerStats.TempSpeedCount
     {
-        get { return _temporarySpeedCount; }
-        set { _temporarySpeedCount = value; }
+        get { return TempSpeedCount; }
+
+        set { TempSpeedCount = value; }
+    }
+
+    int IPlayerStats.PermanentJumpCount
+    {
+        get { return PermanentJumpCount; }
+
+        set { PermanentJumpCount = value; }
+    }
+
+    int IPlayerStats.TempJumpCount
+    {
+        get { return TempJumpCount; }
+
+        set { TempJumpCount = value; }
     }
 
     public PlayerStats()
     {
-        TemporarySpeedCount = 5;
+        TempSpeedCount = 5;
         PermanentSpeedCount = 5;
+
+        TempJumpCount = 0;
+        PermanentJumpCount = 0;
     }
-
-    // Use this for initialization
-    //void Start()
-    //{
-    //    TemporarySpeedCount = 5;
-    //    PermanentSpeedCount = 5;
-    //}
-
-    //// Update is called once per frame
-    //void Update () {
-
-    //}
 }

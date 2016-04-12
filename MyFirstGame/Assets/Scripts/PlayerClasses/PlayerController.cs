@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 
 public partial class PlayerController : GenericSprite
@@ -9,11 +10,7 @@ public partial class PlayerController : GenericSprite
     public int fuelCount;
     public int fuelCountDecrementMax;
     public Text speedCountText;
-
-    [HideInInspector]
-    public PlayerStats _playerStats;
-
-    private Rigidbody2D rb2d;
+    
     private int TouchingFloorObjects;
     private float CurrentAcceleration;
     private float PowerSpeed = 20f;
@@ -27,12 +24,11 @@ public partial class PlayerController : GenericSprite
     protected override void Start()
     {
         base.Start();
-
-        rb2d = GetComponent<Rigidbody2D>();
+        
         TouchingFloorObjects = 0;
         CurrentAcceleration = 0f;
         FuelCountDecrement = 0;
-        _playerStats = new PlayerStats();
+        InitializePowerupList(new PlayerStats());
         moveVertical = moveHorizontal = 0;
     }
 
@@ -61,7 +57,7 @@ public partial class PlayerController : GenericSprite
         UpdateFuelCount(moveVertical, moveHorizontal);
 
         speedCountText.text = string.Format("Speed Powerup Count: {0}",
-            _playerStats.PermanentSpeedCount + _playerStats.TemporarySpeedCount);
+            GetPowerUpCount(PowerupTypes.Speed));
     }
 
     /// <summary>
@@ -161,7 +157,7 @@ public partial class PlayerController : GenericSprite
         else if (other.gameObject.CompareTag(Tags.PickupSpeed.ToString()))
         {
             other.gameObject.SetActive(false);
-            _playerStats.TemporarySpeedCount += 1;
+            IncrementTempPowerUpCount(PowerupTypes.Speed);
         }
     }
 
