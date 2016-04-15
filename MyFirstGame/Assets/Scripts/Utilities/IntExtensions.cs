@@ -1,18 +1,21 @@
-﻿public static class IntExtensions
+﻿namespace Assets.Scripts.Utilities
 {
-
-    public static int AddBitToInt(this int intToAddTo, int bitToAdd)
+    public static class IntExtensions
     {
-        return intToAddTo |= bitToAdd;
-    }
 
-    public static int RemoveBitFromInt(this int intToRemoveFrom, int bitToRemove)
-    {
-        return intToRemoveFrom &= ~bitToRemove;
-    }
+        public static int AddBitToInt(this int intToAddTo, int bitToAdd)
+        {
+            return intToAddTo |= bitToAdd;
+        }
 
-    public static bool CheckForExistenceOfBit(this int intToCheck, int bitToCheckFor)
-    {
-        return (intToCheck & (int) bitToCheckFor) != 0;
+        public static int RemoveBitFromInt(this int intToRemoveFrom, int bitToRemove)
+        {
+            return intToRemoveFrom &= ~bitToRemove;
+        }
+
+        public static bool CheckForExistenceOfBit(this int intToCheck, int bitToCheckFor)
+        {
+            return (intToCheck & (int) bitToCheckFor) != 0;
+        }
     }
 }

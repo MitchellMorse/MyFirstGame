@@ -1,52 +1,54 @@
 ﻿using System;
-using UnityEngine;
-using System.Collections;
 using Assets.Scripts.Interfaces;
+using UnityEngine;
 
-[Serializable]
-public class PlayerStats : MonoBehaviour, IPlayerStats
+namespace Assets.Scripts
 {
-
-    public int PermanentSpeedCount;
-    public int TempSpeedCount;
-
-    public int TempJumpCount;
-    public int PermanentJumpCount;
-
-    int IPlayerStats.PermanentSpeedCount
+    [Serializable]
+    public class PlayerStats : MonoBehaviour, IPlayerStats
     {
-        get { return PermanentSpeedCount; }
 
-        set { PermanentSpeedCount = value; }
-    }
+        public int PermanentSpeedCount;
+        public int TempSpeedCount;
 
-    int IPlayerStats.TempSpeedCount
-    {
-        get { return TempSpeedCount; }
+        public int TempJumpCount;
+        public int PermanentJumpCount;
 
-        set { TempSpeedCount = value; }
-    }
+        int IPlayerStats.PermanentSpeedCount
+        {
+            get { return PermanentSpeedCount; }
 
-    int IPlayerStats.PermanentJumpCount
-    {
-        get { return PermanentJumpCount; }
+            set { PermanentSpeedCount = value; }
+        }
 
-        set { PermanentJumpCount = value; }
-    }
+        int IPlayerStats.TempSpeedCount
+        {
+            get { return TempSpeedCount; }
 
-    int IPlayerStats.TempJumpCount
-    {
-        get { return TempJumpCount; }
+            set { TempSpeedCount = value; }
+        }
 
-        set { TempJumpCount = value; }
-    }
+        int IPlayerStats.PermanentJumpCount
+        {
+            get { return PermanentJumpCount; }
 
-    public PlayerStats()
-    {
-        TempSpeedCount = 5;
-        PermanentSpeedCount = 5;
+            set { PermanentJumpCount = value; }
+        }
 
-        TempJumpCount = 0;
-        PermanentJumpCount = 0;
+        int IPlayerStats.TempJumpCount
+        {
+            get { return TempJumpCount; }
+
+            set { TempJumpCount = value; }
+        }
+
+        public PlayerStats()
+        {
+            TempSpeedCount = 5;
+            PermanentSpeedCount = 5;
+
+            TempJumpCount = 0;
+            PermanentJumpCount = 0;
+        }
     }
 }

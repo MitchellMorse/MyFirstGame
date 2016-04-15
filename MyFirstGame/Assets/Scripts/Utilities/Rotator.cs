@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class Rotator : MonoBehaviour
+namespace Assets.Scripts.Utilities
 {
-	void Update ()
+    public class Rotator : MonoBehaviour
     {
-        transform.Rotate(new Vector3(0, 0, 45) * Time.deltaTime);
+        void Update ()
+        {
+            transform.Rotate(new Vector3(0, 0, 45) * Time.deltaTime);
+        }
     }
 }

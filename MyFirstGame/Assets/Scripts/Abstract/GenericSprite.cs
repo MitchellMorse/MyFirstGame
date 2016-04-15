@@ -1,98 +1,111 @@
-﻿using System;
+﻿using Assets.Scripts.Utilities;
 using UnityEngine;
-using System.Collections;
 
-public abstract class GenericSprite : MonoBehaviour
+namespace Assets.Scripts.Abstract
 {
-    protected int CurrentState;
-    public float AmountToScaleBy = .1f;
-
-    protected float DownwardForce = 0;
-    protected float UpwardForce = 0;
-    protected float RightForce = 0;
-    protected float LeftForce = 0;
-    protected Rigidbody2D rb2d;
-
-    private float MaxPullForce = .5f;
-    private float AmountOfForceToAddPerUpdate = .05f;
-
-    protected virtual void Start()
+    public abstract class GenericSprite : MonoBehaviour
     {
-        rb2d = GetComponent<Rigidbody2D>();
-        CurrentState.AddBitToInt((int) SpriteState.Normal);
-    }
+        protected int CurrentState;
+        public float AmountToScaleBy = .1f;
 
-    protected virtual void Update()
-    {
-        HandleState();
-    }
+        protected float DownwardForce = 0;
+        protected float UpwardForce = 0;
+        protected float RightForce = 0;
+        protected float LeftForce = 0;
+        protected Rigidbody2D rb2d;
 
-    protected virtual void HandleState()
-    {
-        if (CurrentState.CheckForExistenceOfBit((int)SpriteState.DownSlope))
+        private float MaxPullForce = .5f;
+        private float AmountOfForceToAddPerUpdate = .05f;
+        protected float OriginalScale;
+
+        protected virtual void Start()
         {
-            if (DownwardForce < MaxPullForce)
-            {
-                DownwardForce += AmountOfForceToAddPerUpdate;
-            }
+            rb2d = GetComponent<Rigidbody2D>();
+            CurrentState.AddBitToInt((int) SpriteEffects.Normal);
+            OriginalScale = transform.localScale.x;
         }
 
-        if (CurrentState.CheckForExistenceOfBit((int)SpriteState.UpSlope))
+        protected virtual void Update()
         {
-            if (UpwardForce < MaxPullForce)
-            {
-                UpwardForce += AmountOfForceToAddPerUpdate;
-            }
+            HandleState();
         }
+
+        protected virtual void HandleState()
+        {
+            if (CurrentState.CheckForExistenceOfBit((int)SpriteEffects.DownSlope))
+            {
+                if (DownwardForce < MaxPullForce)
+                {
+                    DownwardForce += AmountOfForceToAddPerUpdate;
+                }
+            }
+
+            if (CurrentState.CheckForExistenceOfBit((int)SpriteEffects.UpSlope))
+            {
+                if (UpwardForce < MaxPullForce)
+                {
+                    UpwardForce += AmountOfForceToAddPerUpdate;
+                }
+            }
         
-        if(CurrentState.CheckForExistenceOfBit((int)SpriteState.RightSlope))
-        {
-            if (RightForce < MaxPullForce)
+            if(CurrentState.CheckForExistenceOfBit((int)SpriteEffects.RightSlope))
             {
-                RightForce += AmountOfForceToAddPerUpdate;
+                if (RightForce < MaxPullForce)
+                {
+                    RightForce += AmountOfForceToAddPerUpdate;
+                }
+            }
+
+            if (CurrentState.CheckForExistenceOfBit((int)SpriteEffects.LeftSlope))
+            {
+                if (LeftForce < MaxPullForce)
+                {
+                    LeftForce += AmountOfForceToAddPerUpdate;
+                }
+            }
+
+            if (CurrentState.CheckForExistenceOfBit((int)SpriteEffects.Shrinking))
+            {
+                HandleShrinking();
             }
         }
 
-        if (CurrentState.CheckForExistenceOfBit((int)SpriteState.LeftSlope))
+        protected virtual void HandleShrinking()
         {
-            if (LeftForce < MaxPullForce)
+            if (transform.localScale.x > 0)
             {
-                LeftForce += AmountOfForceToAddPerUpdate;
+                float newXValue = transform.localScale.x - AmountToScaleBy;
+                float newYValue = transform.localScale.y - AmountToScaleBy;
+                transform.localScale = new Vector3(newXValue, newYValue, 1);
+            }
+
+            if (transform.localScale.x <= 0)
+            {
+                DestroyObject(this);
             }
         }
 
-        if (CurrentState.CheckForExistenceOfBit((int)SpriteState.Shrinking))
+        protected virtual float HandleGrowing()
         {
-            HandleShrinking();
-        }
-    }
-
-    protected virtual void HandleShrinking()
-    {
-        if (transform.localScale.x > 0)
-        {
-            float newXValue = transform.localScale.x - AmountToScaleBy;
-            float newYValue = transform.localScale.y - AmountToScaleBy;
+            float newXValue = transform.localScale.x + AmountToScaleBy;
+            float newYValue = transform.localScale.y + AmountToScaleBy;
             transform.localScale = new Vector3(newXValue, newYValue, 1);
+
+            return transform.localScale.x;
         }
 
-        if (transform.localScale.x <= 0)
+        protected virtual void StopVelocity()
         {
-            DestroyObject(this);
+            Rigidbody2D rb = GetComponent<Rigidbody2D>();
+            rb.velocity = Vector3.zero;
         }
-    }
 
-    protected virtual void StopVelocity()
-    {
-        Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        rb.velocity = Vector3.zero;
-    }
+        public void SendSpriteInNewDirection(float horizontalMovement, float verticalMovement, float forceMultiplier)
+        {
+            StopVelocity();
 
-    public void SendSpriteInNewDirection(float horizontalMovement, float verticalMovement, float forceMultiplier)
-    {
-        StopVelocity();
-
-        Vector2 movement = new Vector2(horizontalMovement, verticalMovement);
-        rb2d.AddForce(movement * forceMultiplier);
+            Vector2 movement = new Vector2(horizontalMovement, verticalMovement);
+            rb2d.AddForce(movement * forceMultiplier);
+        }
     }
 }
