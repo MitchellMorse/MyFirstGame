@@ -32,7 +32,7 @@ namespace Assets.Scripts.Abstract
 
         protected virtual void HandleState()
         {
-            if (CurrentState.CheckForExistenceOfBit((int)SpriteEffects.DownSlope))
+            if (CurrentState.CheckForExistenceOfBit((int)SpriteEffects.DownSlope) && !CurrentState.CheckForExistenceOfBit((int)SpriteEffects.Airborne))
             {
                 if (DownwardForce < MaxPullForce)
                 {
@@ -40,7 +40,7 @@ namespace Assets.Scripts.Abstract
                 }
             }
 
-            if (CurrentState.CheckForExistenceOfBit((int)SpriteEffects.UpSlope))
+            if (CurrentState.CheckForExistenceOfBit((int)SpriteEffects.UpSlope) && !CurrentState.CheckForExistenceOfBit((int)SpriteEffects.Airborne))
             {
                 if (UpwardForce < MaxPullForce)
                 {
@@ -48,7 +48,7 @@ namespace Assets.Scripts.Abstract
                 }
             }
         
-            if(CurrentState.CheckForExistenceOfBit((int)SpriteEffects.RightSlope))
+            if(CurrentState.CheckForExistenceOfBit((int)SpriteEffects.RightSlope) && !CurrentState.CheckForExistenceOfBit((int)SpriteEffects.Airborne))
             {
                 if (RightForce < MaxPullForce)
                 {
@@ -56,7 +56,7 @@ namespace Assets.Scripts.Abstract
                 }
             }
 
-            if (CurrentState.CheckForExistenceOfBit((int)SpriteEffects.LeftSlope))
+            if (CurrentState.CheckForExistenceOfBit((int)SpriteEffects.LeftSlope) && !CurrentState.CheckForExistenceOfBit((int)SpriteEffects.Airborne))
             {
                 if (LeftForce < MaxPullForce)
                 {

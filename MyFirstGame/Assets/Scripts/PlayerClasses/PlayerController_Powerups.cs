@@ -16,7 +16,7 @@ namespace Assets.Scripts.PlayerClasses
         private void SetInitialPowerupSettings()
         {
             PrimaryPowerup = PowerupTypes.Jump;
-            SecondaryPowerup = PowerupTypes.Jump;
+            SecondaryPowerup = PowerupTypes.Speed;
         }
 
         private void CheckForPowerupInput()
@@ -116,6 +116,8 @@ namespace Assets.Scripts.PlayerClasses
 
         private void HandleJumpPrimaryInitial()
         {
+            if (!DecrementPowerUpCount(PowerupTypes.Jump)) return;
+
             Physics2D.IgnoreLayerCollision((int)SpriteLayers.BlockingLayer, (int)SpriteLayers.Wall, true);
             CurrentState = CurrentState.AddBitToInt((int)SpriteEffects.Airborne);
         }

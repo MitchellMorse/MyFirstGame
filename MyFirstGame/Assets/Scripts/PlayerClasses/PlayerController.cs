@@ -12,7 +12,8 @@ namespace Assets.Scripts.PlayerClasses
         public Text debugText;
         public int fuelCount;
         public int fuelCountDecrementMax;
-        public Text speedCountText;
+        public Text primaryPowerupText;
+        public Text secondoryPowerupText;
     
         private int TouchingFloorObjects;
         private float CurrentAcceleration;
@@ -63,8 +64,11 @@ namespace Assets.Scripts.PlayerClasses
         {
             UpdateFuelCount(moveVertical, moveHorizontal);
 
-            speedCountText.text = string.Format("Speed Powerup Count: {0}",
-                GetPowerUpCount(PowerupTypes.Speed));
+            primaryPowerupText.text = string.Format("{1} Count: {0}",
+                GetPowerUpCount(PrimaryPowerup), PrimaryPowerup.ToString());
+
+            secondoryPowerupText.text = string.Format("{1} Count: {0}",
+                GetPowerUpCount(SecondaryPowerup), SecondaryPowerup.ToString());
         }
 
         /// <summary>
@@ -166,7 +170,7 @@ namespace Assets.Scripts.PlayerClasses
             {
                 TouchingFloorObjects++;
             }
-            else if (other.gameObject.CompareTag(Tags.PickupSpeed.ToString()))
+            else if (other.gameObject.CompareTag(Tags.PickupSpeed.ToString()) && !CurrentState.CheckForExistenceOfBit((int)SpriteEffects.Airborne))
             {
                 other.gameObject.SetActive(false);
                 IncrementTempPowerUpCount(PowerupTypes.Speed);

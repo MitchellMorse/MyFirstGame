@@ -5,7 +5,7 @@ namespace Assets.Scripts
     public class GameManager : MonoBehaviour
     {
         public static GameManager instance = null;
-        //public Text speedCountText;
+        //public Text primaryPowerupText;
 
         //private PlayerStats _playerStats;
 
@@ -28,7 +28,7 @@ namespace Assets.Scripts
         // Update is called once per frame
         void Update()
         {
-            //speedCountText.text = string.Format("Speed Powerup Count: {0}",
+            //primaryPowerupText.text = string.Format("Speed Powerup Count: {0}",
             //    _playerStats.PermanentSpeedCount + _playerStats.TemporarySpeedCount);
         }
     }
