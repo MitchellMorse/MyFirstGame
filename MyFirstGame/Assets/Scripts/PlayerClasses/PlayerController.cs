@@ -9,7 +9,7 @@ namespace Assets.Scripts.PlayerClasses
     public partial class PlayerController : GenericSprite
     {
         public float speed;
-        public Text debugText;
+        public Text fuelText;
         public int fuelCount;
         public int fuelCountDecrementMax;
         public Text primaryPowerupText;
@@ -64,11 +64,8 @@ namespace Assets.Scripts.PlayerClasses
         {
             UpdateFuelCount(moveVertical, moveHorizontal);
 
-            primaryPowerupText.text = string.Format("{1} Count: {0}",
-                GetPowerUpCount(PrimaryPowerup), PrimaryPowerup.ToString());
-
-            secondoryPowerupText.text = string.Format("{1} Count: {0}",
-                GetPowerUpCount(SecondaryPowerup), SecondaryPowerup.ToString());
+            primaryPowerupText.text = string.Format("{0}", GetPowerUpCount(PrimaryPowerup));
+            secondoryPowerupText.text = string.Format("{0}", GetPowerUpCount(SecondaryPowerup));
         }
 
         /// <summary>
@@ -116,13 +113,12 @@ namespace Assets.Scripts.PlayerClasses
                 FuelCountDecrement = 0;
             }
 
-            SetDebugText(string.Format("Current fuel: {0}", fuelCount));
+            SetDebugText(string.Format("{0}", fuelCount));
         }
 
         private void PlayerSpeedProcessing()
         {
             float currentSpeed = rb2d.velocity.magnitude;
-            //SetDebugText(string.Format("Current speed: {0}", currentSpeed));
         }
 
         private void HandlePlayerLeavingFloor()
@@ -211,7 +207,7 @@ namespace Assets.Scripts.PlayerClasses
 
         private void SetDebugText(string text)
         {
-            debugText.text = text;
+            fuelText.text = text;
         }
     }
 }
