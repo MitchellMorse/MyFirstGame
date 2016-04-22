@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Utilities;
+﻿using System.Collections.Generic;
+using Assets.Scripts.Utilities;
 using UnityEngine;
 
 namespace Assets.Scripts.Abstract
@@ -24,6 +25,7 @@ namespace Assets.Scripts.Abstract
             CurrentState.AddBitToInt((int) SpriteEffects.Normal);
             OriginalScale = transform.localScale.x;
         }
+        
 
         protected virtual void Update()
         {

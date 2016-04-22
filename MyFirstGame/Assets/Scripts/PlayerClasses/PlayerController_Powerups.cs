@@ -3,6 +3,7 @@ using System.Linq;
 using Assets.Scripts.Interfaces;
 using Assets.Scripts.Utilities;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.PlayerClasses
 {
@@ -12,6 +13,23 @@ namespace Assets.Scripts.PlayerClasses
         private List<Powerup> Powerups;
         private PowerupTypes PrimaryPowerup;
         private PowerupTypes SecondaryPowerup;
+
+        public GameObject PrimaryPowerupImage;
+        public GameObject SecondaryPowerupImage;
+
+        public void PrimaryPowerupClicked()
+        {
+            PrimaryPowerup = PrimaryPowerup == PowerupTypes.Jump ? PowerupTypes.Speed : PowerupTypes.Jump;
+
+            SetPowerupHudImages();
+        }
+
+        public void SecondaryPowerupClicked()
+        {
+            SecondaryPowerup = SecondaryPowerup == PowerupTypes.Jump ? PowerupTypes.Speed : PowerupTypes.Jump;
+
+            SetPowerupHudImages();
+        }
 
         private void SetInitialPowerupSettings()
         {
@@ -25,6 +43,15 @@ namespace Assets.Scripts.PlayerClasses
             {
                 HandlePowerupFired(false);
             }
+        }
+
+        private void SetPowerupHudImages()
+        {
+            Image primaryImage = PrimaryPowerupImage.GetComponent<Image>();
+            Image secondaryImage = SecondaryPowerupImage.GetComponent<Image>();
+
+            primaryImage.sprite = Sprites.Single(s => s.name == string.Format("{0}Pickup", PrimaryPowerup.ToString()));
+            secondaryImage.sprite = Sprites.Single(s => s.name == string.Format("{0}Pickup", SecondaryPowerup.ToString()));
         }
 
         private void HandlePowerupFired(bool isSecondary)

@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Abstract;
+﻿using System.Collections.Generic;
+using Assets.Scripts.Abstract;
 using Assets.Scripts.Utilities;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,7 +15,10 @@ namespace Assets.Scripts.PlayerClasses
         public int fuelCountDecrementMax;
         public Text primaryPowerupText;
         public Text secondoryPowerupText;
-    
+
+        //public Sprite TestSprite;
+
+        private List<Sprite> Sprites;
         private int TouchingFloorObjects;
         private float CurrentAcceleration;
         private float PowerSpeed = 20f;
@@ -37,6 +41,16 @@ namespace Assets.Scripts.PlayerClasses
             SetInitialPowerupSettings();
             moveVertical = moveHorizontal = 0;
             MaxJumpScale = transform.localScale.x*2;
+            LoadSprites();
+
+            SetPowerupHudImages();
+        }
+
+        private void LoadSprites()
+        {
+            Sprites = new List<Sprite>();
+            Sprites.Add(Resources.Load<Sprite>("Sprites/Pickups/JumpPickup"));
+            Sprites.Add(Resources.Load<Sprite>("Sprites/Pickups/SpeedPickup"));
         }
 
         protected override void Update()

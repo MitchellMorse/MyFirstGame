@@ -47,7 +47,7 @@ namespace Assets.Scripts
             TempSpeedCount = 5;
             PermanentSpeedCount = 5;
 
-            TempJumpCount = 2;
+            TempJumpCount = 7;
             PermanentJumpCount = 1;
         }
     }

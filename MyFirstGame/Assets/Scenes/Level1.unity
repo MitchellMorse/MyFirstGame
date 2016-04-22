@@ -574,6 +574,7 @@ GameObject:
   - 224: {fileID: 312138197}
   - 222: {fileID: 312138199}
   - 114: {fileID: 312138198}
+  - 114: {fileID: 312138200}
   m_Layer: 5
   m_Name: SecondaryPowerupText
   m_TagString: Untagged
@@ -637,6 +638,18 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 312138196}
+--- !u!114 &312138200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 312138196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b476bfe5151e664db3b624de8fee218, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Player: {fileID: 1859503298}
 --- !u!1 &317800789
 GameObject:
   m_ObjectHideFlags: 0
@@ -923,6 +936,8 @@ GameObject:
   - 224: {fileID: 346685754}
   - 222: {fileID: 346685756}
   - 114: {fileID: 346685755}
+  - 114: {fileID: 346685757}
+  - 114: {fileID: 346685758}
   m_Layer: 5
   m_Name: PrimaryPowerupImage
   m_TagString: Untagged
@@ -980,6 +995,29 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 346685753}
+--- !u!114 &346685757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 346685753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60d03f8c312cf3845826b00b2699e8b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &346685758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 346685753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9fb6d70874d7b7469b68753fa39bf07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Player: {fileID: 1859503298}
 --- !u!1 &369204770
 GameObject:
   m_ObjectHideFlags: 0
@@ -1606,6 +1644,7 @@ GameObject:
   - 224: {fileID: 895536748}
   - 222: {fileID: 895536750}
   - 114: {fileID: 895536749}
+  - 114: {fileID: 895536751}
   m_Layer: 5
   m_Name: SecondaryPowerupImage
   m_TagString: Untagged
@@ -1663,6 +1702,18 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 895536747}
+--- !u!114 &895536751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 895536747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b476bfe5151e664db3b624de8fee218, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Player: {fileID: 1859503298}
 --- !u!4 &903724306 stripped
 Transform:
   m_PrefabParentObject: {fileID: 426584, guid: 16aab1aa3096b2940b7934545a77275a, type: 2}
@@ -2905,6 +2956,7 @@ GameObject:
   - 224: {fileID: 1729510098}
   - 222: {fileID: 1729510100}
   - 114: {fileID: 1729510099}
+  - 114: {fileID: 1729510101}
   m_Layer: 5
   m_Name: PrimaryPowerupText
   m_TagString: Untagged
@@ -2970,6 +3022,18 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1729510097}
+--- !u!114 &1729510101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1729510097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9fb6d70874d7b7469b68753fa39bf07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Player: {fileID: 1859503298}
 --- !u!1 &1736359709
 GameObject:
   m_ObjectHideFlags: 0
@@ -3175,6 +3239,14 @@ Prefab:
       propertyPath: fuelText
       value: 
       objectReference: {fileID: 1716700140}
+    - target: {fileID: 11421822, guid: df4740c265b98e64089a22fdd0cbf852, type: 2}
+      propertyPath: PrimaryPowerupImage
+      value: 
+      objectReference: {fileID: 346685753}
+    - target: {fileID: 11421822, guid: df4740c265b98e64089a22fdd0cbf852, type: 2}
+      propertyPath: SecondaryPowerupImage
+      value: 
+      objectReference: {fileID: 895536747}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: df4740c265b98e64089a22fdd0cbf852, type: 2}
   m_IsPrefabParent: 0
