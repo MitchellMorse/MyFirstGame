@@ -30,7 +30,8 @@ namespace Assets.Scripts.Utilities
         FloorSlopeUp,
         FloorSlopeLeft,
         FloorSlopeRight,
-        PickupSpeed
+        PickupSpeed,
+        DamagingEnemy
     }
 
     public enum PowerupTypes

@@ -12,6 +12,7 @@ TagManager:
   - FloorSlopeRight
   - FloorSlopeLeft
   - PickupSpeed
+  - DamagingEnemy
   layers:
   - Default
   - TransparentFX
@@ -57,6 +58,9 @@ TagManager:
     locked: 0
   - name: Powerups
     uniqueID: 2925812739
+    locked: 0
+  - name: Enemy
+    uniqueID: 3627290755
     locked: 0
   - name: Player
     uniqueID: 361909769

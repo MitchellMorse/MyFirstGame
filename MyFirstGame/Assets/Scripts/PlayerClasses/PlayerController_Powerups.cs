@@ -50,8 +50,8 @@ namespace Assets.Scripts.PlayerClasses
             Image primaryImage = PrimaryPowerupImage.GetComponent<Image>();
             Image secondaryImage = SecondaryPowerupImage.GetComponent<Image>();
 
-            primaryImage.sprite = Sprites.Single(s => s.name == string.Format("{0}Pickup", PrimaryPowerup.ToString()));
-            secondaryImage.sprite = Sprites.Single(s => s.name == string.Format("{0}Pickup", SecondaryPowerup.ToString()));
+            primaryImage.sprite = _sprites.Single(s => s.name == string.Format("{0}Pickup", PrimaryPowerup.ToString()));
+            secondaryImage.sprite = _sprites.Single(s => s.name == string.Format("{0}Pickup", SecondaryPowerup.ToString()));
         }
 
         private void HandlePowerupFired(bool isSecondary)
@@ -153,7 +153,7 @@ namespace Assets.Scripts.PlayerClasses
         {
             if (!CurrentState.CheckForExistenceOfBit((int) SpriteEffects.Airborne)) return;
 
-            if (transform.localScale.x >= MaxJumpScale)
+            if (transform.localScale.x >= _maxJumpScale)
             {
                 CurrentState = CurrentState.AddBitToInt((int) SpriteEffects.MaxHeightReached);
             }

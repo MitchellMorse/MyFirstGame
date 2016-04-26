@@ -8,6 +8,7 @@ namespace Assets.Scripts.Abstract
     {
         protected int CurrentState;
         public float AmountToScaleBy = .1f;
+        public float speed;
 
         protected float DownwardForce = 0;
         protected float UpwardForce = 0;
@@ -18,9 +19,13 @@ namespace Assets.Scripts.Abstract
         private float MaxPullForce = .5f;
         private float AmountOfForceToAddPerUpdate = .05f;
         protected float OriginalScale;
+        protected float moveVertical;
+        protected float moveHorizontal;
+        protected int _touchingFloorObjects;
 
         protected virtual void Start()
         {
+            _touchingFloorObjects = 0;
             rb2d = GetComponent<Rigidbody2D>();
             CurrentState.AddBitToInt((int) SpriteEffects.Normal);
             OriginalScale = transform.localScale.x;
@@ -30,6 +35,8 @@ namespace Assets.Scripts.Abstract
         protected virtual void Update()
         {
             HandleState();
+
+            HandleObjectLeavingFloor();
         }
 
         protected virtual void HandleState()
@@ -108,6 +115,87 @@ namespace Assets.Scripts.Abstract
 
             Vector2 movement = new Vector2(horizontalMovement, verticalMovement);
             rb2d.AddForce(movement * forceMultiplier);
+        }
+
+        protected void AddForce(float? forceSpeed = null)
+        {
+            if (forceSpeed == null) forceSpeed = speed;
+
+            Vector2 movement = new Vector2(moveHorizontal, moveVertical); //- vertical goes down
+
+            if (moveHorizontal != 0f || moveVertical != 0f)
+            {
+                rb2d.AddForce(movement * forceSpeed.Value);
+            }
+        }
+
+        protected void HandleObjectLeavingFloor()
+        {
+            if (_touchingFloorObjects <= 0 && !CurrentState.CheckForExistenceOfBit((int)SpriteEffects.Airborne))
+            {
+                CurrentState = CurrentState.AddBitToInt((int)SpriteEffects.Shrinking);
+                StopVelocity();
+            }
+        }
+
+        protected virtual void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.gameObject.CompareTag(Tags.FloorSlopeDown.ToString()))
+            {
+                CurrentState = CurrentState.AddBitToInt((int)SpriteEffects.DownSlope);
+                _touchingFloorObjects++;
+            }
+            else if (other.gameObject.CompareTag(Tags.FloorSlopeUp.ToString()))
+            {
+                CurrentState = CurrentState.AddBitToInt((int)SpriteEffects.UpSlope);
+                _touchingFloorObjects++;
+            }
+            else if (other.gameObject.CompareTag(Tags.FloorSlopeRight.ToString()))
+            {
+                CurrentState = CurrentState.AddBitToInt((int)SpriteEffects.RightSlope);
+                _touchingFloorObjects++;
+            }
+            else if (other.gameObject.CompareTag(Tags.FloorSlopeLeft.ToString()))
+            {
+                CurrentState = CurrentState.AddBitToInt((int)SpriteEffects.LeftSlope);
+                _touchingFloorObjects++;
+            }
+            else if (other.gameObject.CompareTag(Tags.Floor.ToString()))
+            {
+                _touchingFloorObjects++;
+            }
+        }
+
+        protected virtual void OnTriggerExit2D(Collider2D other)
+        {
+            if (other.gameObject.CompareTag(Tags.FloorSlopeDown.ToString()))
+            {
+                CurrentState = CurrentState.RemoveBitFromInt((int)SpriteEffects.DownSlope);
+                DownwardForce = 0;
+                _touchingFloorObjects--;
+            }
+            else if (other.gameObject.CompareTag(Tags.FloorSlopeUp.ToString()))
+            {
+                CurrentState = CurrentState.RemoveBitFromInt((int)SpriteEffects.UpSlope);
+                UpwardForce = 0;
+                _touchingFloorObjects--;
+            }
+            else if (other.gameObject.CompareTag(Tags.FloorSlopeRight.ToString()))
+            {
+                CurrentState = CurrentState.RemoveBitFromInt((int)SpriteEffects.RightSlope);
+                RightForce = 0;
+                _touchingFloorObjects--;
+            }
+            else if (other.gameObject.CompareTag(Tags.FloorSlopeLeft.ToString()))
+            {
+                CurrentState = CurrentState.RemoveBitFromInt((int)SpriteEffects.LeftSlope);
+                UpwardForce = 0;
+                _touchingFloorObjects--;
+            }
+            else if (other.gameObject.CompareTag(Tags.Floor.ToString()))
+            {
+                _touchingFloorObjects--;
+            }
         }
     }
 }

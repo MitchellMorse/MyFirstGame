@@ -9,38 +9,27 @@ namespace Assets.Scripts.PlayerClasses
 {
     public partial class PlayerController : GenericSprite
     {
-        public float speed;
         public Text fuelText;
         public int fuelCount;
         public int fuelCountDecrementMax;
         public Text primaryPowerupText;
         public Text secondoryPowerupText;
 
-        //public Sprite TestSprite;
-
-        private List<Sprite> Sprites;
-        private int TouchingFloorObjects;
-        private float CurrentAcceleration;
-        private float PowerSpeed = 20f;
-        private int FuelCountDecrement;
-        private float decelTime = 10;
-        private float currenDecelTime = 0;
-        private Vector3 testSpeed;
-        private float moveVertical;
-        private float moveHorizontal;
-        private float MaxJumpScale;
+        private List<Sprite> _sprites;
+        private float _powerSpeed = 20f;
+        private int _fuelCountDecrement;
+        private float _currenDecelTime = 0;
+        private float _maxJumpScale;
 
         protected override void Start()
         {
             base.Start();
         
-            TouchingFloorObjects = 0;
-            CurrentAcceleration = 0f;
-            FuelCountDecrement = 0;
+            _fuelCountDecrement = 0;
             InitializePowerupList(new PlayerStats());
             SetInitialPowerupSettings();
             moveVertical = moveHorizontal = 0;
-            MaxJumpScale = transform.localScale.x*2;
+            _maxJumpScale = transform.localScale.x*2;
             LoadSprites();
 
             SetPowerupHudImages();
@@ -48,9 +37,9 @@ namespace Assets.Scripts.PlayerClasses
 
         private void LoadSprites()
         {
-            Sprites = new List<Sprite>();
-            Sprites.Add(Resources.Load<Sprite>("Sprites/Pickups/JumpPickup"));
-            Sprites.Add(Resources.Load<Sprite>("Sprites/Pickups/SpeedPickup"));
+            _sprites = new List<Sprite>();
+            _sprites.Add(Resources.Load<Sprite>("Sprites/Pickups/JumpPickup"));
+            _sprites.Add(Resources.Load<Sprite>("Sprites/Pickups/SpeedPickup"));
         }
 
         protected override void Update()
@@ -59,15 +48,7 @@ namespace Assets.Scripts.PlayerClasses
         
             CheckForPlayerInput();
 
-            Vector2 movement = new Vector2(moveHorizontal, moveVertical); //- vertical goes down
-
-            if (moveHorizontal != 0f || moveVertical != 0f)
-            {
-                rb2d.AddForce(movement*speed);
-            }
-
-            PlayerSpeedProcessing();
-            HandlePlayerLeavingFloor();
+            AddForce();
             HandleJumpOngoing();
             UpdateHud();
 
@@ -118,104 +99,46 @@ namespace Assets.Scripts.PlayerClasses
 
             if (playerMoving)
             {
-                FuelCountDecrement += 1;
+                _fuelCountDecrement += 1;
             }
 
-            if (FuelCountDecrement >= fuelCountDecrementMax)
+            if (_fuelCountDecrement >= fuelCountDecrementMax)
             {
                 fuelCount -= 1;
-                FuelCountDecrement = 0;
+                _fuelCountDecrement = 0;
             }
 
             SetDebugText(string.Format("{0}", fuelCount));
         }
 
-        private void PlayerSpeedProcessing()
-        {
-            float currentSpeed = rb2d.velocity.magnitude;
-        }
-
-        private void HandlePlayerLeavingFloor()
-        {
-            if(TouchingFloorObjects <= 0 && !CurrentState.CheckForExistenceOfBit((int)SpriteEffects.Airborne))
-            {
-                CurrentState = CurrentState.AddBitToInt((int)SpriteEffects.Shrinking);
-                StopVelocity();
-            }
-        }
-
         public bool IsPlayerAtPowerSpeed()
         {
-            return rb2d.velocity.magnitude >= PowerSpeed;
+            return rb2d.velocity.magnitude >= _powerSpeed;
         }
 
         void OnCollisionEnter2D(Collision2D collider)
         {
-            int layer = collider.gameObject.layer;
+            if (collider.gameObject.CompareTag(Tags.DamagingEnemy.ToString()))
+            {
+                StopVelocity();
+
+                Vector2 dir = (Vector3)collider.contacts[0].point - transform.position;
+                dir = -dir.normalized;
+
+                moveHorizontal = dir.x;
+                moveVertical = dir.y;
+                AddForce(1000);
+            }
         }
     
-        void OnTriggerEnter2D(Collider2D other)
+        protected override void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.gameObject.CompareTag(Tags.FloorSlopeDown.ToString()))
-            {
-                CurrentState = CurrentState.AddBitToInt((int) SpriteEffects.DownSlope);
-                TouchingFloorObjects++;
-            }
-            else if (other.gameObject.CompareTag(Tags.FloorSlopeUp.ToString()))
-            {
-                CurrentState = CurrentState.AddBitToInt((int)SpriteEffects.UpSlope);
-                TouchingFloorObjects++;
-            }
-            else if (other.gameObject.CompareTag(Tags.FloorSlopeRight.ToString()))
-            {
-                CurrentState = CurrentState.AddBitToInt((int)SpriteEffects.RightSlope);
-                TouchingFloorObjects++;
-            }
-            else if (other.gameObject.CompareTag(Tags.FloorSlopeLeft.ToString()))
-            {
-                CurrentState = CurrentState.AddBitToInt((int)SpriteEffects.LeftSlope);
-                TouchingFloorObjects++;
-            }
-            else if (other.gameObject.CompareTag(Tags.Floor.ToString()))
-            {
-                TouchingFloorObjects++;
-            }
-            else if (other.gameObject.CompareTag(Tags.PickupSpeed.ToString()) && !CurrentState.CheckForExistenceOfBit((int)SpriteEffects.Airborne))
+            base.OnTriggerEnter2D(other);
+            
+            if (other.gameObject.CompareTag(Tags.PickupSpeed.ToString()) && !CurrentState.CheckForExistenceOfBit((int)SpriteEffects.Airborne))
             {
                 other.gameObject.SetActive(false);
                 IncrementTempPowerUpCount(PowerupTypes.Speed);
-            }
-        }
-
-        void OnTriggerExit2D(Collider2D other)
-        {
-            if (other.gameObject.CompareTag(Tags.FloorSlopeDown.ToString()))
-            {
-                CurrentState = CurrentState.RemoveBitFromInt((int) SpriteEffects.DownSlope);
-                DownwardForce = 0;
-                TouchingFloorObjects--;
-            }
-            else if (other.gameObject.CompareTag(Tags.FloorSlopeUp.ToString()))
-            {
-                CurrentState = CurrentState.RemoveBitFromInt((int)SpriteEffects.UpSlope);
-                UpwardForce = 0;
-                TouchingFloorObjects--;
-            }
-            else if (other.gameObject.CompareTag(Tags.FloorSlopeRight.ToString()))
-            {
-                CurrentState = CurrentState.RemoveBitFromInt((int)SpriteEffects.RightSlope);
-                RightForce = 0;
-                TouchingFloorObjects--;
-            }
-            else if (other.gameObject.CompareTag(Tags.FloorSlopeLeft.ToString()))
-            {
-                CurrentState = CurrentState.RemoveBitFromInt((int)SpriteEffects.LeftSlope);
-                UpwardForce = 0;
-                TouchingFloorObjects--;
-            }
-            else if (other.gameObject.CompareTag(Tags.Floor.ToString()))
-            {
-                TouchingFloorObjects--;
             }
         }
 
