@@ -23,14 +23,27 @@ namespace Assets.Scripts.Abstract
         protected float moveHorizontal;
         protected int _touchingFloorObjects;
 
+        protected List<GameObject> CurrentlyCollidingObjects;
+
         protected virtual void Start()
         {
             _touchingFloorObjects = 0;
             rb2d = GetComponent<Rigidbody2D>();
             CurrentState.AddBitToInt((int) SpriteEffects.Normal);
             OriginalScale = transform.localScale.x;
+            CurrentlyCollidingObjects = new List<GameObject>();
         }
-        
+
+        protected virtual void OnCollisionEnter2D(Collision2D collider)
+        {
+            CurrentlyCollidingObjects.Add(collider.gameObject);
+        }
+
+        protected virtual void OnCollisionExit2D(Collider2D collider)
+        {
+            CurrentlyCollidingObjects.Remove(collider.gameObject);
+        }
+
 
         protected virtual void Update()
         {

@@ -13,7 +13,7 @@ GameObject:
   - 50: {fileID: 5098598}
   - 114: {fileID: 11499534}
   m_Layer: 8
-  m_Name: WanderingEnemy
+  m_Name: EnemyWanderingBouncer
   m_TagString: DamagingEnemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
