@@ -116,19 +116,9 @@ namespace Assets.Scripts.PlayerClasses
             return rb2d.velocity.magnitude >= _powerSpeed;
         }
 
-        void OnCollisionEnter2D(Collision2D collider)
+        protected override void OnCollisionEnter2D(Collision2D collider)
         {
-            if (collider.gameObject.CompareTag(Tags.DamagingEnemy.ToString()))
-            {
-                StopVelocity();
-
-                Vector2 dir = (Vector3)collider.contacts[0].point - transform.position;
-                dir = -dir.normalized;
-
-                moveHorizontal = dir.x;
-                moveVertical = dir.y;
-                AddForce(1000);
-            }
+            base.OnCollisionEnter2D(collider);
         }
     
         protected override void OnTriggerEnter2D(Collider2D other)

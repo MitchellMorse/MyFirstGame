@@ -153,28 +153,12 @@ namespace Assets.Scripts.PlayerClasses
         {
             if (!CurrentState.CheckForExistenceOfBit((int) SpriteEffects.Airborne)) return;
 
-            if (transform.localScale.x >= _maxJumpScale)
-            {
-                CurrentState = CurrentState.AddBitToInt((int) SpriteEffects.MaxHeightReached);
-            }
+            bool finished = GrowShrinkAnimation(_maxJumpScale, OriginalScale, AmountToScaleBy);
 
-            if (!CurrentState.CheckForExistenceOfBit((int) SpriteEffects.MaxHeightReached))
+            if (finished)
             {
-                HandleGrowing();
-            }
-            else
-            {
-                if (transform.localScale.x >= OriginalScale)
-                {
-                    HandleShrinking();
-                }
-                else
-                {
-                    CurrentState = CurrentState.RemoveBitFromInt((int) SpriteEffects.Airborne);
-                    CurrentState = CurrentState.RemoveBitFromInt((int)SpriteEffects.MaxHeightReached);
-
-                    Physics2D.IgnoreLayerCollision((int)SpriteLayers.BlockingLayer, (int)SpriteLayers.Wall, false);
-                }
+                CurrentState = CurrentState.RemoveBitFromInt((int)SpriteEffects.Airborne);
+                Physics2D.IgnoreLayerCollision((int)SpriteLayers.BlockingLayer, (int)SpriteLayers.Wall, false);
             }
         }
 

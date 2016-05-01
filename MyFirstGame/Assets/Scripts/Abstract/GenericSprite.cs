@@ -9,6 +9,10 @@ namespace Assets.Scripts.Abstract
         protected int CurrentState;
         public float AmountToScaleBy = .1f;
         public float speed;
+        [HideInInspector]
+        public float moveVertical;
+        [HideInInspector]
+        public float moveHorizontal;
 
         protected float DownwardForce = 0;
         protected float UpwardForce = 0;
@@ -19,8 +23,6 @@ namespace Assets.Scripts.Abstract
         private float MaxPullForce = .5f;
         private float AmountOfForceToAddPerUpdate = .05f;
         protected float OriginalScale;
-        protected float moveVertical;
-        protected float moveHorizontal;
         protected int _touchingFloorObjects;
 
         protected List<GameObject> CurrentlyCollidingObjects;
@@ -88,16 +90,52 @@ namespace Assets.Scripts.Abstract
 
             if (CurrentState.CheckForExistenceOfBit((int)SpriteEffects.Shrinking))
             {
-                HandleShrinking();
+                HandleShrinking(AmountToScaleBy);
             }
         }
 
-        protected virtual void HandleShrinking()
+        #region Shrinking and growing
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="maxXScale"></param>
+        /// <param name="originalScale"></param>
+        /// <param name="amountToScaleBy"></param>
+        /// <returns>true if animation is finished</returns>
+        protected virtual bool GrowShrinkAnimation(float maxXScale, float originalScale, float amountToScaleBy)
+        {
+            bool finished = false;
+            if (transform.localScale.x >= maxXScale)
+            {
+                CurrentState = CurrentState.AddBitToInt((int)SpriteEffects.MaxHeightReached);
+            }
+
+            if (!CurrentState.CheckForExistenceOfBit((int)SpriteEffects.MaxHeightReached))
+            {
+                HandleGrowing(amountToScaleBy);
+            }
+            else
+            {
+                if (transform.localScale.x >= OriginalScale)
+                {
+                    HandleShrinking(amountToScaleBy);
+                }
+                else
+                {
+                    CurrentState = CurrentState.RemoveBitFromInt((int)SpriteEffects.MaxHeightReached);
+                    finished = true;
+                }
+            }
+
+            return finished;
+        }
+
+        protected virtual void HandleShrinking(float amountToScaleBy)
         {
             if (transform.localScale.x > 0)
             {
-                float newXValue = transform.localScale.x - AmountToScaleBy;
-                float newYValue = transform.localScale.y - AmountToScaleBy;
+                float newXValue = transform.localScale.x - amountToScaleBy;
+                float newYValue = transform.localScale.y - amountToScaleBy;
                 transform.localScale = new Vector3(newXValue, newYValue, 1);
             }
 
@@ -107,16 +145,17 @@ namespace Assets.Scripts.Abstract
             }
         }
 
-        protected virtual float HandleGrowing()
+        protected virtual float HandleGrowing(float amountToScaleBy)
         {
-            float newXValue = transform.localScale.x + AmountToScaleBy;
-            float newYValue = transform.localScale.y + AmountToScaleBy;
+            float newXValue = transform.localScale.x + amountToScaleBy;
+            float newYValue = transform.localScale.y + amountToScaleBy;
             transform.localScale = new Vector3(newXValue, newYValue, 1);
 
             return transform.localScale.x;
         }
+        #endregion
 
-        protected virtual void StopVelocity()
+        public virtual void StopVelocity()
         {
             Rigidbody2D rb = GetComponent<Rigidbody2D>();
             rb.velocity = Vector3.zero;
@@ -130,7 +169,7 @@ namespace Assets.Scripts.Abstract
             rb2d.AddForce(movement * forceMultiplier);
         }
 
-        protected void AddForce(float? forceSpeed = null)
+        public void AddForce(float? forceSpeed = null)
         {
             if (forceSpeed == null) forceSpeed = speed;
 

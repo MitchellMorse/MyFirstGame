@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Assets.Scripts.Abstract;
+using Assets.Scripts.Utilities;
 
 public abstract class NonPlayerMoving : GenericSprite
 {
@@ -84,8 +85,7 @@ public abstract class NonPlayerMoving : GenericSprite
     {
         if (CurrentlyCollidingObjects.Count > 0)
         {
-            Vector2 direction = transform.position - CurrentlyCollidingObjects[0].transform.position;
-            direction = -direction.normalized;
+            var direction = transform.position.CalculateOppositeVector(CurrentlyCollidingObjects[0].transform.position);
 
             moveHorizontal = direction.x;
             moveVertical = direction.y;
@@ -96,5 +96,6 @@ public abstract class NonPlayerMoving : GenericSprite
             moveHorizontal = Random.Range(-1f, 1f);
         }
     }
+
     #endregion
 }
