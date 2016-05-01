@@ -56,6 +56,7 @@ namespace Assets.Scripts.Utilities
         Powerup,
         Floor,
         Wall,
-        Pickups
+        Pickups,
+        Player
     }
 }

@@ -4,17 +4,20 @@ using Assets.Scripts.Utilities;
 
 public class BouncerEnemy : NonPlayerMoving
 {
+    public MovementTypes _movementType;
+    public int _maxTimeCount;
+
     private float _maxGrowthScale;
 
     // Use this for initialization
     protected override int MaxTimeCount
     {
-        get { return 200; }
+        get { return _maxTimeCount; }
     }
 
     protected override MovementTypes MovementType
     {
-        get { return MovementTypes.Wandering; }
+        get { return _movementType; }
     }
 
     protected override TravelTypes TravelType
@@ -27,6 +30,8 @@ public class BouncerEnemy : NonPlayerMoving
         base.Start();
         
         _maxGrowthScale = transform.localScale.x * 1.3f;
+
+        if (_maxTimeCount <= 0) _maxTimeCount = 200;
     }
 	
 	// Update is called once per frame

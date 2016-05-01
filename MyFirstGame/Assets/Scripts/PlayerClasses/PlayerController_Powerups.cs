@@ -145,7 +145,8 @@ namespace Assets.Scripts.PlayerClasses
         {
             if (!DecrementPowerUpCount(PowerupTypes.Jump)) return;
 
-            Physics2D.IgnoreLayerCollision((int)SpriteLayers.BlockingLayer, (int)SpriteLayers.Wall, true);
+            Physics2D.IgnoreLayerCollision((int)SpriteLayers.Player, (int)SpriteLayers.Wall, true);
+            Physics2D.IgnoreLayerCollision((int)SpriteLayers.Player, (int)SpriteLayers.BlockingLayer, true);
             CurrentState = CurrentState.AddBitToInt((int)SpriteEffects.Airborne);
         }
 
@@ -158,7 +159,8 @@ namespace Assets.Scripts.PlayerClasses
             if (finished)
             {
                 CurrentState = CurrentState.RemoveBitFromInt((int)SpriteEffects.Airborne);
-                Physics2D.IgnoreLayerCollision((int)SpriteLayers.BlockingLayer, (int)SpriteLayers.Wall, false);
+                Physics2D.IgnoreLayerCollision((int)SpriteLayers.Player, (int)SpriteLayers.Wall, false);
+                Physics2D.IgnoreLayerCollision((int)SpriteLayers.Player, (int)SpriteLayers.BlockingLayer, false);
             }
         }
 

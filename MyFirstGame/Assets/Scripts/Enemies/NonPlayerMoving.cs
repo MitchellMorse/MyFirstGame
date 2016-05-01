@@ -11,7 +11,7 @@ public abstract class NonPlayerMoving : GenericSprite
         Air
     }
 
-    protected enum MovementTypes
+    public enum MovementTypes
     {
         Wandering,
         FollowingPlayer
@@ -60,6 +60,7 @@ public abstract class NonPlayerMoving : GenericSprite
                 InitializeWanderingMovement();
                 break;
             case MovementTypes.FollowingPlayer:
+                InitializePlayerTargettingMovement();
                 break;
         }
     }
@@ -75,6 +76,7 @@ public abstract class NonPlayerMoving : GenericSprite
                 InitializeWanderingMovement();
                 break;
             case MovementTypes.FollowingPlayer:
+                InitializePlayerTargettingMovement();
                 break;
         }
     }
@@ -97,5 +99,16 @@ public abstract class NonPlayerMoving : GenericSprite
         }
     }
 
+    #endregion
+
+    #region Following player
+
+    private void InitializePlayerTargettingMovement()
+    {
+        Vector2 vectorToPlayer = transform.position.CalculateOppositeVector(GameObject.Find("Player").transform.position);
+
+        moveHorizontal = vectorToPlayer.x;
+        moveVertical = vectorToPlayer.y;
+    }
     #endregion
 }
