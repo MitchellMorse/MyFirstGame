@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Abstract;
 using Assets.Scripts.Utilities;
 using UnityEngine;
@@ -20,6 +21,9 @@ namespace Assets.Scripts.PlayerClasses
         private int _fuelCountDecrement;
         private float _currenDecelTime = 0;
         private float _maxJumpScale;
+        private int _playerHealth;
+        private int _invincibleCount;
+        private int _maxInvincible;
 
         protected override void Start()
         {
@@ -31,6 +35,10 @@ namespace Assets.Scripts.PlayerClasses
             moveVertical = moveHorizontal = 0;
             _maxJumpScale = transform.localScale.x*2;
             LoadSprites();
+            _playerHealth = 4;
+
+            _invincibleCount = 0;
+            _maxInvincible = 200;
 
             SetPowerupHudImages();
         }
@@ -40,6 +48,11 @@ namespace Assets.Scripts.PlayerClasses
             _sprites = new List<Sprite>();
             _sprites.Add(Resources.Load<Sprite>("Sprites/Pickups/JumpPickup"));
             _sprites.Add(Resources.Load<Sprite>("Sprites/Pickups/SpeedPickup"));
+
+            _sprites.Add(Resources.Load<Sprite>("Sprites/Player/UFO"));
+            _sprites.Add(Resources.Load<Sprite>("Sprites/Player/Player1Damage"));
+            _sprites.Add(Resources.Load<Sprite>("Sprites/Player/Player2Damage"));
+            _sprites.Add(Resources.Load<Sprite>("Sprites/Player/Player3Damage"));
         }
 
         protected override void Update()
@@ -53,6 +66,44 @@ namespace Assets.Scripts.PlayerClasses
             UpdateHud();
 
             moveVertical = moveHorizontal = 0;
+
+            if (CurrentState.CheckForExistenceOfBit((int) SpriteEffects.Invincible))
+            {
+                _invincibleCount++;
+
+                if (_invincibleCount >= _maxInvincible)
+                {
+                    CurrentState = CurrentState.RemoveBitFromInt((int) SpriteEffects.Invincible);
+                    _invincibleCount = 0;
+                }
+            }
+        }
+
+        public void DamagePlayer(int damageAmount = 1)
+        {
+            if (CurrentState.CheckForExistenceOfBit((int) SpriteEffects.Invincible)) return;
+
+            _playerHealth -= damageAmount;
+
+            SpriteRenderer playerImage = GetComponent<SpriteRenderer>();
+
+            CurrentState = CurrentState.AddBitToInt((int) SpriteEffects.Invincible);
+
+            switch (_playerHealth)
+            {
+                case 3:
+                    playerImage.sprite = _sprites.Single(s => s.name == "Player1Damage");
+                    break;
+                case 2:
+                    playerImage.sprite = _sprites.Single(s => s.name == "Player2Damage");
+                    break;
+                case 1:
+                    playerImage.sprite = _sprites.Single(s => s.name == "Player3Damage");
+                    break;
+                default:
+                    CurrentState = CurrentState.AddBitToInt((int) SpriteEffects.Dead);
+                    break;
+            }
         }
 
         private void UpdateHud()
@@ -85,10 +136,10 @@ namespace Assets.Scripts.PlayerClasses
 
         private void CheckForMovementInput(ref float moveVertical, ref float moveHorizontal)
         {
-            moveHorizontal = CurrentState.CheckForExistenceOfBit((int) SpriteEffects.Shrinking)
+            moveHorizontal = CurrentState.CheckForExistenceOfBit((int) SpriteEffects.Shrinking) || CurrentState.CheckForExistenceOfBit((int)SpriteEffects.Dead)
                 ? 0
                 : Input.GetAxis("Horizontal") + RightForce - LeftForce;
-            moveVertical = CurrentState.CheckForExistenceOfBit((int) SpriteEffects.Shrinking)
+            moveVertical = CurrentState.CheckForExistenceOfBit((int) SpriteEffects.Shrinking) || CurrentState.CheckForExistenceOfBit((int)SpriteEffects.Dead)
                 ? 0
                 : Input.GetAxis("Vertical") - DownwardForce + UpwardForce;
         }

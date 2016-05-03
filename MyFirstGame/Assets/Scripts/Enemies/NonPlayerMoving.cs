@@ -19,6 +19,7 @@ public abstract class NonPlayerMoving : GenericSprite
 
     private int _timeCount;
 
+    protected float _maxGrowthScale;
     protected abstract int MaxTimeCount { get; }
     protected abstract MovementTypes MovementType { get; }
     protected abstract TravelTypes TravelType { get; }
@@ -111,4 +112,16 @@ public abstract class NonPlayerMoving : GenericSprite
         moveVertical = vectorToPlayer.y;
     }
     #endregion
+
+    protected void HandleGrowAnimationOngoing()
+    {
+        if (!CurrentState.CheckForExistenceOfBit((int)SpriteEffects.Growing)) return;
+
+        bool finished = GrowShrinkAnimation(_maxGrowthScale, OriginalScale, .05f);
+
+        if (finished)
+        {
+            CurrentState = CurrentState.RemoveBitFromInt((int) SpriteEffects.Growing);
+        }
+    }
 }

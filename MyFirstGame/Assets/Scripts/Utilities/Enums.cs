@@ -13,7 +13,9 @@ namespace Assets.Scripts.Utilities
         RightSlope = 16,
         LeftSlope = 32,
         Airborne = 64,
-        MaxHeightReached = 128
+        MaxHeightReached = 128,
+        Dead = 256,
+        Invincible = 512
     }
 
     public enum Tags
