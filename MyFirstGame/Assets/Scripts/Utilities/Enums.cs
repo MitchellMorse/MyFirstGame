@@ -15,7 +15,8 @@ namespace Assets.Scripts.Utilities
         Airborne = 64,
         MaxHeightReached = 128,
         Dead = 256,
-        Invincible = 512
+        Invincible = 512,
+        ControlledByOtherObject = 1024
     }
 
     public enum Tags

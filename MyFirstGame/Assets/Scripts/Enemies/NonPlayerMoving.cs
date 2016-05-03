@@ -14,7 +14,8 @@ public abstract class NonPlayerMoving : GenericSprite
     public enum MovementTypes
     {
         Wandering,
-        FollowingPlayer
+        FollowingPlayer,
+        Stationary
     }
 
     private int _timeCount;
@@ -63,6 +64,9 @@ public abstract class NonPlayerMoving : GenericSprite
             case MovementTypes.FollowingPlayer:
                 InitializePlayerTargettingMovement();
                 break;
+            case MovementTypes.Stationary:
+                InitializeStationaryMovement();
+                break;
         }
     }
 
@@ -78,6 +82,9 @@ public abstract class NonPlayerMoving : GenericSprite
                 break;
             case MovementTypes.FollowingPlayer:
                 InitializePlayerTargettingMovement();
+                break;
+            case MovementTypes.Stationary:
+                InitializeStationaryMovement();
                 break;
         }
     }
@@ -110,6 +117,15 @@ public abstract class NonPlayerMoving : GenericSprite
 
         moveHorizontal = vectorToPlayer.x;
         moveVertical = vectorToPlayer.y;
+    }
+    #endregion
+
+    #region Stationary
+
+    private void InitializeStationaryMovement()
+    {
+        moveHorizontal = 0;
+        moveVertical = 0;
     }
     #endregion
 

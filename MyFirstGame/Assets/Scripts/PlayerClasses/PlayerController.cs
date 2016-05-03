@@ -134,12 +134,20 @@ namespace Assets.Scripts.PlayerClasses
             return moveVertical != 0 || moveHorizontal != 0;
         }
 
+        private bool CanPlayerMove()
+        {
+            return !CurrentState.CheckForExistenceOfBit((int) SpriteEffects.Shrinking) &&
+                   !CurrentState.CheckForExistenceOfBit((int) SpriteEffects.Dead) &&
+                   !CurrentState.CheckForExistenceOfBit((int) SpriteEffects.ControlledByOtherObject);
+        }
+
         private void CheckForMovementInput(ref float moveVertical, ref float moveHorizontal)
         {
-            moveHorizontal = CurrentState.CheckForExistenceOfBit((int) SpriteEffects.Shrinking) || CurrentState.CheckForExistenceOfBit((int)SpriteEffects.Dead)
+            moveHorizontal = !CanPlayerMove()
                 ? 0
                 : Input.GetAxis("Horizontal") + RightForce - LeftForce;
-            moveVertical = CurrentState.CheckForExistenceOfBit((int) SpriteEffects.Shrinking) || CurrentState.CheckForExistenceOfBit((int)SpriteEffects.Dead)
+
+            moveVertical = !CanPlayerMove()
                 ? 0
                 : Input.GetAxis("Vertical") - DownwardForce + UpwardForce;
         }

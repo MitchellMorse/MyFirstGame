@@ -249,5 +249,15 @@ namespace Assets.Scripts.Abstract
                 _touchingFloorObjects--;
             }
         }
+
+        public virtual void AddStatusEffect(SpriteEffects effect)
+        {
+            CurrentState = CurrentState.AddBitToInt((int) effect);
+        }
+
+        public virtual void RemoveStatusEffect(SpriteEffects effect)
+        {
+            CurrentState = CurrentState.RemoveBitFromInt((int) effect);
+        }
     }
 }
