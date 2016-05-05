@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Assets.Scripts.Abstract;
 using Assets.Scripts.PlayerClasses;
 using Assets.Scripts.Utilities;
 
@@ -10,8 +11,8 @@ public class ThrowerEnemy : NonPlayerMoving
 
     private int _rotationTimeCount;
     private int _rotationTimeMax;
-    private bool _playerGrabbed;
-    private PlayerController playerObject;
+    private bool _objectGrabbed;
+    private GenericSprite _grabbedObject;
 
     // Use this for initialization
     protected override int MaxTimeCount
@@ -35,7 +36,7 @@ public class ThrowerEnemy : NonPlayerMoving
 
         _rotationTimeCount = 0;
         _rotationTimeMax = 0;
-        _playerGrabbed = false;
+        _objectGrabbed = false;
     }
 	
 	// Update is called once per frame
@@ -54,44 +55,51 @@ public class ThrowerEnemy : NonPlayerMoving
         {
             InitializeMovement();
         }
-        else if (collider.gameObject.CompareTag(Tags.Player.ToString()))
+        else if (collider.gameObject.CompareTag(Tags.Player.ToString()) || collider.gameObject.CompareTag(Tags.DamagingEnemy.ToString()))
         {
-            HandlePlayerCollision(collider.gameObject.GetComponent<PlayerController>());
+            if (_objectGrabbed) return;
+
+            HandleGenericSpriteCollision(collider.gameObject.GetComponent<GenericSprite>());
             this.StopVelocity();
         }
     }
 
-    private void HandlePlayerCollision(PlayerController player)
+    protected override void HandlePlayerCollision(PlayerController player)
     {
-        player.StopVelocity();
-        player.AddStatusEffect(SpriteEffects.ControlledByOtherObject);
+        HandleGenericSpriteCollision(player);
+    }
+
+    private void HandleGenericSpriteCollision(GenericSprite sprite)
+    {
+        sprite.StopVelocity();
+        sprite.AddStatusEffect(SpriteEffects.ControlledByOtherObject);
 
         _rotationTimeMax = Random.Range(100, 400);
-        _playerGrabbed = true;
-        playerObject = player;
+        _objectGrabbed = true;
+        _grabbedObject = sprite;
     }
 
     private void HandleSpinning()
     {
-        if (!_playerGrabbed) return;
+        if (!_objectGrabbed) return;
 
         _rotationTimeCount++;
         transform.Rotate(new Vector3(0, 0, 45) * (_rotationTimeCount + 1));
 
-        playerObject.transform.RotateAround(this.transform.position, Vector3.forward, _rotationTimeCount + 1);
+        _grabbedObject.transform.RotateAround(this.transform.position, Vector3.forward, _rotationTimeCount + 1);
 
         if (_rotationTimeCount >= _rotationTimeMax)
         {
-            Vector2 dir = transform.position.CalculateOppositeVector(playerObject.transform.position);
+            Vector2 dir = transform.position.CalculateOppositeVector(_grabbedObject.transform.position);
 
-            playerObject.moveHorizontal = dir.x;
-            playerObject.moveVertical = dir.y;
-            playerObject.AddForce(_rotationTimeCount * 10);
+            _grabbedObject.moveHorizontal = dir.x;
+            _grabbedObject.moveVertical = dir.y;
+            _grabbedObject.AddForce(_rotationTimeCount * 10);
 
-            playerObject.RemoveStatusEffect(SpriteEffects.ControlledByOtherObject);
+            _grabbedObject.RemoveStatusEffect(SpriteEffects.ControlledByOtherObject);
 
             _rotationTimeCount = 0;
-            _playerGrabbed = false;
+            _objectGrabbed = false;
         }
     }
 }

@@ -60,8 +60,10 @@ public class ContactDamageEnemy : NonPlayerMoving
         }
     }
 
-    private void HandlePlayerCollision(PlayerController player)
+    protected override void HandlePlayerCollision(PlayerController player)
     {
+        base.HandlePlayerCollision(player);
+
         player.StopVelocity();
 
         Vector2 dir = transform.position.CalculateOppositeVector(player.transform.position);

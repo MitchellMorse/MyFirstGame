@@ -6,7 +6,7 @@ namespace Assets.Scripts.Abstract
 {
     public abstract class GenericSprite : MonoBehaviour
     {
-        protected int CurrentState;
+        public int CurrentState;
         public float AmountToScaleBy = .1f;
         public float speed;
         [HideInInspector]
@@ -141,7 +141,7 @@ namespace Assets.Scripts.Abstract
 
             if (transform.localScale.x <= 0)
             {
-                DestroyObject(this);
+                GetComponent<SpriteRenderer>().enabled = false;
             }
         }
 

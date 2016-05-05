@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Assets.Scripts.Abstract;
+using Assets.Scripts.PlayerClasses;
 using Assets.Scripts.Utilities;
 
 public abstract class NonPlayerMoving : GenericSprite
@@ -113,10 +114,20 @@ public abstract class NonPlayerMoving : GenericSprite
 
     private void InitializePlayerTargettingMovement()
     {
-        Vector2 vectorToPlayer = transform.position.CalculateOppositeVector(GameObject.Find("Player").transform.position);
+        PlayerController player = GameObject.Find("Player").GetComponent<PlayerController>();
 
-        moveHorizontal = vectorToPlayer.x;
-        moveVertical = vectorToPlayer.y;
+
+        if (!player.CurrentState.CheckForExistenceOfBit((int) SpriteEffects.ControlledByOtherObject))
+        {
+            Vector2 vectorToPlayer = transform.position.CalculateOppositeVector(player.transform.position);
+
+            moveHorizontal = vectorToPlayer.x;
+            moveVertical = vectorToPlayer.y;
+        }
+        else
+        {
+            InitializeWanderingMovement();
+        }
     }
     #endregion
 
@@ -124,6 +135,8 @@ public abstract class NonPlayerMoving : GenericSprite
 
     private void InitializeStationaryMovement()
     {
+        transform.Rotate(new Vector3(0, 0, 45) * Time.deltaTime);
+
         moveHorizontal = 0;
         moveVertical = 0;
     }
@@ -139,5 +152,18 @@ public abstract class NonPlayerMoving : GenericSprite
         {
             CurrentState = CurrentState.RemoveBitFromInt((int) SpriteEffects.Growing);
         }
+    }
+
+    protected virtual void HandlePlayerCollision(PlayerController player)
+    {
+        this.StopVelocity();
+
+        Vector2 vectorAwayFromPlayer = player.transform.position.CalculateOppositeVector(transform.position);
+
+        moveHorizontal = vectorAwayFromPlayer.x;
+        moveVertical = vectorAwayFromPlayer.y;
+
+        _timeCount = MaxTimeCount - 50;
+        AddForce(500);
     }
 }
