@@ -90,7 +90,7 @@ public class ThrowerEnemy : NonPlayerMoving
 
         if (_rotationTimeCount >= _rotationTimeMax)
         {
-            Vector2 dir = transform.position.CalculateOppositeVector(_grabbedObject.transform.position);
+            Vector2 dir = transform.position.CalculateVectorTowards(_grabbedObject.transform.position);
 
             _grabbedObject.moveHorizontal = dir.x;
             _grabbedObject.moveVertical = dir.y;

@@ -96,7 +96,7 @@ public abstract class NonPlayerMoving : GenericSprite
     {
         if (CurrentlyCollidingObjects.Count > 0)
         {
-            var direction = transform.position.CalculateOppositeVector(CurrentlyCollidingObjects[0].transform.position);
+            var direction = transform.position.CalculateVectorTowards(CurrentlyCollidingObjects[0].transform.position);
 
             moveHorizontal = direction.x;
             moveVertical = direction.y;
@@ -114,12 +114,28 @@ public abstract class NonPlayerMoving : GenericSprite
 
     private void InitializePlayerTargettingMovement()
     {
-        PlayerController player = GameObject.Find("Player").GetComponent<PlayerController>();
+        bool playerIsInFollowableState = true;
+        PlayerController player = null;
 
+        GameObject playerObject = GameObject.Find("Player");
 
-        if (!player.CurrentState.CheckForExistenceOfBit((int) SpriteEffects.ControlledByOtherObject))
+        if (playerObject == null)
         {
-            Vector2 vectorToPlayer = transform.position.CalculateOppositeVector(player.transform.position);
+            playerIsInFollowableState = false;
+        }
+        else
+        {
+            player = playerObject.GetComponent<PlayerController>();
+
+            if(player.CurrentState.CheckForExistenceOfBit((int)SpriteEffects.ControlledByOtherObject))
+            {
+                playerIsInFollowableState = false;
+            }
+        }
+
+        if (playerIsInFollowableState)
+        {
+            Vector2 vectorToPlayer = transform.position.CalculateVectorTowards(player.transform.position);
 
             moveHorizontal = vectorToPlayer.x;
             moveVertical = vectorToPlayer.y;
@@ -158,7 +174,7 @@ public abstract class NonPlayerMoving : GenericSprite
     {
         this.StopVelocity();
 
-        Vector2 vectorAwayFromPlayer = player.transform.position.CalculateOppositeVector(transform.position);
+        Vector2 vectorAwayFromPlayer = player.transform.position.CalculateVectorTowards(transform.position);
 
         moveHorizontal = vectorAwayFromPlayer.x;
         moveVertical = vectorAwayFromPlayer.y;

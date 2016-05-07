@@ -21,7 +21,6 @@ namespace Assets.Scripts.PlayerClasses
         private int _fuelCountDecrement;
         private float _currenDecelTime = 0;
         private float _maxJumpScale;
-        private int _playerHealth;
         private int _invincibleCount;
         private int _maxInvincible;
 
@@ -35,7 +34,8 @@ namespace Assets.Scripts.PlayerClasses
             moveVertical = moveHorizontal = 0;
             _maxJumpScale = transform.localScale.x*2;
             LoadSprites();
-            _playerHealth = 4;
+            MaxHealth = 4;
+            CurrentHealth = 4;
 
             _invincibleCount = 0;
             _maxInvincible = 200;
@@ -79,17 +79,14 @@ namespace Assets.Scripts.PlayerClasses
             }
         }
 
-        public void DamagePlayer(int damageAmount = 1)
+        public override void DamageObject(int damageAmount = 1)
         {
-            if (CurrentState.CheckForExistenceOfBit((int) SpriteEffects.Invincible)) return;
-
-            _playerHealth -= damageAmount;
+            base.DamageObject(damageAmount);
 
             SpriteRenderer playerImage = GetComponent<SpriteRenderer>();
-
             CurrentState = CurrentState.AddBitToInt((int) SpriteEffects.Invincible);
 
-            switch (_playerHealth)
+            switch (CurrentHealth)
             {
                 case 3:
                     playerImage.sprite = _sprites.Single(s => s.name == "Player1Damage");
@@ -102,6 +99,7 @@ namespace Assets.Scripts.PlayerClasses
                     break;
                 default:
                     CurrentState = CurrentState.AddBitToInt((int) SpriteEffects.Dead);
+                    HandleObjectDestruction();
                     break;
             }
         }

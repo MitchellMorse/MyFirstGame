@@ -66,11 +66,11 @@ public class ContactDamageEnemy : NonPlayerMoving
 
         player.StopVelocity();
 
-        Vector2 dir = transform.position.CalculateOppositeVector(player.transform.position);
+        Vector2 dir = transform.position.CalculateVectorTowards(player.transform.position);
 
         player.moveHorizontal = dir.x;
         player.moveVertical = dir.y;
         player.AddForce(500);
-        player.DamagePlayer();
+        player.DamageObject();
     }
 }

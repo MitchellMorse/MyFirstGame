@@ -6,6 +6,7 @@ namespace Assets.Scripts.Abstract
 {
     public abstract class GenericSprite : MonoBehaviour
     {
+        [HideInInspector]
         public int CurrentState;
         public float AmountToScaleBy = .1f;
         public float speed;
@@ -14,11 +15,14 @@ namespace Assets.Scripts.Abstract
         [HideInInspector]
         public float moveHorizontal;
 
+        public int MaxHealth;
+
         protected float DownwardForce = 0;
         protected float UpwardForce = 0;
         protected float RightForce = 0;
         protected float LeftForce = 0;
         protected Rigidbody2D rb2d;
+        protected int CurrentHealth;
 
         private float MaxPullForce = .5f;
         private float AmountOfForceToAddPerUpdate = .05f;
@@ -34,6 +38,13 @@ namespace Assets.Scripts.Abstract
             CurrentState.AddBitToInt((int) SpriteEffects.Normal);
             OriginalScale = transform.localScale.x;
             CurrentlyCollidingObjects = new List<GameObject>();
+
+            if (MaxHealth <= 0)
+            {
+                MaxHealth = 1;
+            }
+
+            CurrentHealth = MaxHealth;
         }
 
         protected virtual void OnCollisionEnter2D(Collision2D collider)
@@ -141,7 +152,7 @@ namespace Assets.Scripts.Abstract
 
             if (transform.localScale.x <= 0)
             {
-                GetComponent<SpriteRenderer>().enabled = false;
+                HandleObjectDestruction();
             }
         }
 
@@ -169,16 +180,26 @@ namespace Assets.Scripts.Abstract
             rb2d.AddForce(movement * forceMultiplier);
         }
 
-        public void AddForce(float? forceSpeed = null)
+        public void AddForce(float? forceSpeed = null, float? horizontal = null, float? vertical = null)
         {
             if (forceSpeed == null) forceSpeed = speed;
 
-            Vector2 movement = new Vector2(moveHorizontal, moveVertical); //- vertical goes down
-
-            if (moveHorizontal != 0f || moveVertical != 0f)
+            if (horizontal != null && vertical != null)
             {
+                Vector2 movement = new Vector2(horizontal.Value, vertical.Value); //- vertical goes down
                 rb2d.AddForce(movement * forceSpeed.Value);
             }
+            if (moveHorizontal != 0f || moveVertical != 0f)
+            {
+                Vector2 movement = new Vector2(moveHorizontal, moveVertical); //- vertical goes down
+                rb2d.AddForce(movement * forceSpeed.Value);
+            }
+        }
+
+        protected virtual void HandleObjectDestruction()
+        {
+            GetComponent<SpriteRenderer>().enabled = false;
+            DestroyObject(this);
         }
 
         protected void HandleObjectLeavingFloor()
@@ -258,6 +279,19 @@ namespace Assets.Scripts.Abstract
         public virtual void RemoveStatusEffect(SpriteEffects effect)
         {
             CurrentState = CurrentState.RemoveBitFromInt((int) effect);
+        }
+
+        public virtual void DamageObject(int damageAmount = 1)
+        {
+            if (CurrentState.CheckForExistenceOfBit((int)SpriteEffects.Invincible)) return;
+
+            CurrentHealth -= damageAmount;
+
+            if (CurrentHealth <= 0)
+            {
+                AddStatusEffect(SpriteEffects.Dead);
+                HandleObjectDestruction();
+            }
         }
     }
 }
