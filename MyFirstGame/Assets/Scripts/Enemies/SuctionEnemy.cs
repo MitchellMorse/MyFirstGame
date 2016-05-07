@@ -12,6 +12,7 @@ public class SuctionEnemy : NonPlayerMoving
     public float SuctionStrength;
     public float SuctionRadius;
     public int SuctionPulseRate;
+    public bool Sucks;
 
     private int _suctionTimeCount;
 
@@ -78,15 +79,15 @@ public class SuctionEnemy : NonPlayerMoving
             GenericSprite sprite = collisionObject.gameObject.GetComponent<GenericSprite>();
 
             if (sprite == null) continue;
-
-            //calculate vector for object to move towards the suction enemy
-            //TODO: this is not calculating the vector correctly
-            Vector2 vectorTowardsSuction = sprite.transform.position.CalculateVectorTowards(transform.position);
+            
+            Vector2 vector = Sucks
+            ? sprite.transform.position.CalculateVectorTowards(transform.position)
+            : transform.position.CalculateVectorTowards(sprite.transform.position);
 
             float distance = Vector2.Distance(transform.position, sprite.transform.position);
             float force = SuctionStrength/distance;
 
-            sprite.AddForce(force, vectorTowardsSuction.x, vectorTowardsSuction.y);
+            sprite.AddForce(force, vector.x, vector.y);
         }
     }
 
