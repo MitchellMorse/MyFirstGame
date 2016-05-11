@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Abstract;
 using Assets.Scripts.Utilities;
@@ -16,6 +17,9 @@ namespace Assets.Scripts.PlayerClasses
         public Text primaryPowerupText;
         public Text secondoryPowerupText;
 
+        [HideInInspector]
+        public int CurrentPlayerEffects;
+
         private List<Sprite> _sprites;
         private float _powerSpeed = 20f;
         private int _fuelCountDecrement;
@@ -28,6 +32,7 @@ namespace Assets.Scripts.PlayerClasses
         {
             base.Start();
         
+            CurrentPlayerEffects = (int)PlayerEffects.Normal;
             _fuelCountDecrement = 0;
             InitializePowerupList(new PlayerStats());
             SetInitialPowerupSettings();
@@ -186,6 +191,10 @@ namespace Assets.Scripts.PlayerClasses
             {
                 other.gameObject.SetActive(false);
                 IncrementTempPowerUpCount(PowerupTypes.Speed);
+            }
+            else if (other.gameObject.CompareTag(Tags.LevelGoal.ToString()))
+            {
+                CurrentPlayerEffects = CurrentPlayerEffects.AddBitToInt((int) PlayerEffects.EndOfLevelReached);
             }
         }
 

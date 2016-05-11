@@ -19,6 +19,13 @@ namespace Assets.Scripts.Utilities
         ControlledByOtherObject = 1024
     }
 
+    [Flags]
+    public enum PlayerEffects
+    {
+        Normal = 0,
+        EndOfLevelReached = 1
+    }
+
     public enum Tags
     {
         Respawn,
@@ -34,7 +41,8 @@ namespace Assets.Scripts.Utilities
         FloorSlopeLeft,
         FloorSlopeRight,
         PickupSpeed,
-        DamagingEnemy
+        DamagingEnemy,
+        LevelGoal
     }
 
     public enum PowerupTypes

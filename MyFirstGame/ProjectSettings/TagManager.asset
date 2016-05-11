@@ -13,6 +13,7 @@ TagManager:
   - FloorSlopeLeft
   - PickupSpeed
   - DamagingEnemy
+  - LevelGoal
   layers:
   - Default
   - TransparentFX
