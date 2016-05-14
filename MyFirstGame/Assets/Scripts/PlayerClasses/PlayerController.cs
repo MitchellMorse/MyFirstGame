@@ -17,6 +17,8 @@ namespace Assets.Scripts.PlayerClasses
         public Text primaryPowerupText;
         public Text secondoryPowerupText;
 
+        public Text debugText;
+
         [HideInInspector]
         public int CurrentPlayerEffects;
 
@@ -27,6 +29,11 @@ namespace Assets.Scripts.PlayerClasses
         private float _maxJumpScale;
         private int _invincibleCount;
         private int _maxInvincible;
+
+        private float _mouseXMovement;
+        private float _mouseYMovement;
+
+        private const float _mouseModifier = .03f;
 
         protected override void Start()
         {
@@ -146,13 +153,89 @@ namespace Assets.Scripts.PlayerClasses
 
         private void CheckForMovementInput(ref float moveVertical, ref float moveHorizontal)
         {
+            HandleMouseInput();
+
+            //HandleKeyboardInput();
+        }
+
+        private void HandleKeyboardInput()
+        {
+            float xAxis = Input.GetAxis("Horizontal");
             moveHorizontal = !CanPlayerMove()
                 ? 0
-                : Input.GetAxis("Horizontal") + RightForce - LeftForce;
+                : xAxis + RightForce - LeftForce;
+
+            float yAxis = Input.GetAxis("Vertical");
+            moveVertical = !CanPlayerMove()
+                ? 0
+                : yAxis - DownwardForce + UpwardForce;
+
+            debugText.text = string.Format("x: {0}; y: {1}", xAxis, yAxis);
+        }
+
+        private void HandleMouseInput()
+        {
+            bool mouseClicked = Input.GetMouseButton(0);
+
+            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+            float xDir = mousePosition.x;
+            float yDir = mousePosition.y;
+
+            if (!mouseClicked)
+            {
+                if (xDir > 0)
+                {
+                    _mouseXMovement = _mouseXMovement - _mouseModifier > 0 ? _mouseXMovement - _mouseModifier : 0;
+                }
+                else if (xDir < 0)
+                {
+                    _mouseXMovement = _mouseXMovement + _mouseModifier < 0 ? _mouseXMovement + _mouseModifier : 0;
+                }
+
+                if (yDir > 0)
+                {
+                    _mouseYMovement = _mouseYMovement - _mouseModifier > 0 ? _mouseYMovement - _mouseModifier : 0;
+                }
+                else if (xDir < 0)
+                {
+                    _mouseYMovement = _mouseYMovement + _mouseModifier < 0 ? _mouseYMovement + _mouseModifier : 0;
+                }
+
+                return;
+            }
+
+            if (mousePosition.x > transform.position.x)
+            {
+                //move right
+                _mouseXMovement = _mouseXMovement + _mouseModifier < 1f ? _mouseXMovement + _mouseModifier : 1f;
+            }
+            else if (mousePosition.x < transform.position.x)
+            {
+                //move left
+                _mouseXMovement = _mouseXMovement - _mouseModifier > -1f ? _mouseXMovement - _mouseModifier : -1f;
+            }
+
+            if (mousePosition.y > transform.position.y)
+            {
+                //move up
+                _mouseYMovement = _mouseYMovement + _mouseModifier < 1f ? _mouseYMovement + _mouseModifier : 1f;
+            }
+            else if (mousePosition.y < transform.position.y)
+            {
+                //move down
+                _mouseYMovement = _mouseYMovement - _mouseModifier > -1f ? _mouseYMovement - _mouseModifier : -1f;
+            }
+
+            moveHorizontal = !CanPlayerMove()
+                ? 0
+                : _mouseXMovement + RightForce - LeftForce;
 
             moveVertical = !CanPlayerMove()
                 ? 0
-                : Input.GetAxis("Vertical") - DownwardForce + UpwardForce;
+                : _mouseYMovement - DownwardForce + UpwardForce;
+
+            debugText.text = string.Format("x: {0}; y: {1}", _mouseXMovement, _mouseYMovement);
         }
 
         private void UpdateFuelCount(float moveVertical, float moveHorizontal)
