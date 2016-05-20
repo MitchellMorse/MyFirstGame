@@ -26,7 +26,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 193680}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -8.590509, y: -0.47009993, z: 0}
+  m_LocalPosition: {x: -5.1, y: -4.2, z: 0}
   m_LocalScale: {x: 0.7589613, y: 0.7767837, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -74,16 +74,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentState: 0
-  AmountToScaleBy: 0.1
+  AmountToScaleBy: 0.05
   speed: 10
   moveVertical: 0
   moveHorizontal: 0
   MaxHealth: 0
   fuelText: {fileID: 0}
-  fuelCount: 100
+  fuelCount: 1000
   fuelCountDecrementMax: 25
   primaryPowerupText: {fileID: 0}
   secondoryPowerupText: {fileID: 0}
+  debugText: {fileID: 0}
+  CurrentPlayerEffects: 0
   PrimaryPowerupImage: {fileID: 0}
   SecondaryPowerupImage: {fileID: 0}
 --- !u!212 &21203930

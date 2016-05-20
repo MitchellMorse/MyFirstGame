@@ -178,64 +178,18 @@ namespace Assets.Scripts.PlayerClasses
             bool mouseClicked = Input.GetMouseButton(0);
 
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector2 movementVector = transform.position.CalculateVectorTowards(mousePosition).normalized;
 
-            float xDir = mousePosition.x;
-            float yDir = mousePosition.y;
-
-            if (!mouseClicked)
+            if (mouseClicked)
             {
-                if (xDir > 0)
-                {
-                    _mouseXMovement = _mouseXMovement - _mouseModifier > 0 ? _mouseXMovement - _mouseModifier : 0;
-                }
-                else if (xDir < 0)
-                {
-                    _mouseXMovement = _mouseXMovement + _mouseModifier < 0 ? _mouseXMovement + _mouseModifier : 0;
-                }
+                moveHorizontal = !CanPlayerMove()
+                    ? 0
+                    : movementVector.x + RightForce - LeftForce;
 
-                if (yDir > 0)
-                {
-                    _mouseYMovement = _mouseYMovement - _mouseModifier > 0 ? _mouseYMovement - _mouseModifier : 0;
-                }
-                else if (xDir < 0)
-                {
-                    _mouseYMovement = _mouseYMovement + _mouseModifier < 0 ? _mouseYMovement + _mouseModifier : 0;
-                }
-
-                return;
+                moveVertical = !CanPlayerMove()
+                    ? 0
+                    : movementVector.y - DownwardForce + UpwardForce;
             }
-
-            if (mousePosition.x > transform.position.x)
-            {
-                //move right
-                _mouseXMovement = _mouseXMovement + _mouseModifier < 1f ? _mouseXMovement + _mouseModifier : 1f;
-            }
-            else if (mousePosition.x < transform.position.x)
-            {
-                //move left
-                _mouseXMovement = _mouseXMovement - _mouseModifier > -1f ? _mouseXMovement - _mouseModifier : -1f;
-            }
-
-            if (mousePosition.y > transform.position.y)
-            {
-                //move up
-                _mouseYMovement = _mouseYMovement + _mouseModifier < 1f ? _mouseYMovement + _mouseModifier : 1f;
-            }
-            else if (mousePosition.y < transform.position.y)
-            {
-                //move down
-                _mouseYMovement = _mouseYMovement - _mouseModifier > -1f ? _mouseYMovement - _mouseModifier : -1f;
-            }
-
-            moveHorizontal = !CanPlayerMove()
-                ? 0
-                : _mouseXMovement + RightForce - LeftForce;
-
-            moveVertical = !CanPlayerMove()
-                ? 0
-                : _mouseYMovement - DownwardForce + UpwardForce;
-
-            debugText.text = string.Format("x: {0}; y: {1}", _mouseXMovement, _mouseYMovement);
         }
 
         private void UpdateFuelCount(float moveVertical, float moveHorizontal)

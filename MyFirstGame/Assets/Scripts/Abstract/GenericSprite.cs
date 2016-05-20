@@ -180,7 +180,7 @@ namespace Assets.Scripts.Abstract
             rb2d.AddForce(movement * forceMultiplier);
         }
 
-        public void AddForce(float? forceSpeed = null, float? horizontal = null, float? vertical = null)
+        public virtual void AddForce(float? forceSpeed = null, float? horizontal = null, float? vertical = null)
         {
             if (forceSpeed == null) forceSpeed = speed;
 
