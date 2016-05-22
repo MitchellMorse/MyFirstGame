@@ -190,6 +190,14 @@ namespace Assets.Scripts.PlayerClasses
                     ? 0
                     : movementVector.y - DownwardForce + UpwardForce;
             }
+            else
+            {
+                Rigidbody2D rb = GetComponent<Rigidbody2D>();
+                if (rb.velocity.magnitude > 0)
+                {
+                    rb.velocity = rb.velocity*0.99f;
+                }
+            }
         }
 
         private void UpdateFuelCount(float moveVertical, float moveHorizontal)
