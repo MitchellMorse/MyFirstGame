@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using Assets.Scripts.Abstract;
 using Assets.Scripts.Utilities;
+using Models;
 using UnityEngine;
+using UnityEngine.Experimental.Networking;
 using UnityEngine.UI;
 using SpriteState = UnityEngine.UI.SpriteState;
 
@@ -52,8 +56,28 @@ namespace Assets.Scripts.PlayerClasses
             _invincibleCount = 0;
             _maxInvincible = 200;
 
+
             SetPowerupHudImages();
+            
+            StartCoroutine(GetTestStuff());
         }
+
+        IEnumerator GetTestStuff()
+        {
+            UnityWebRequest request = UnityWebRequest.Get("http://localhost:64279/test/get?id=1");
+            yield return request.Send();
+
+            if (request.isError)
+            {
+                //do something...
+            }
+            else
+            {
+                string results = request.downloadHandler.text;
+                TestStuff test = JsonUtility.FromJson<TestStuff>(results);
+                debugText.text = test.TestData;
+            }
+        } 
 
         private void LoadSprites()
         {

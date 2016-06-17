@@ -1,4 +1,6 @@
-﻿using Assets.Scripts.PlayerClasses;
+﻿using System;
+using System.Net;
+using Assets.Scripts.PlayerClasses;
 using Assets.Scripts.Utilities;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,9 +11,6 @@ namespace Assets.Scripts
     {
         public static GameManager instance = null;
         
-        //public Text primaryPowerupText;
-
-        //private PlayerStats _playerStats;
         private PlayerController player;
         private Scene CurrentScene;
         private CustomSceneManager _customSceneManager;
@@ -29,7 +28,6 @@ namespace Assets.Scripts
             }
 
             DontDestroyOnLoad(gameObject);
-            //_playerStats = new PlayerStats();
 
             _customSceneManager = new CustomSceneManager();
 

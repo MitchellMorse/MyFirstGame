@@ -284,7 +284,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Testing
+  m_Text: 
 --- !u!114 &56523911 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 11476624, guid: df4740c265b98e64089a22fdd0cbf852,
